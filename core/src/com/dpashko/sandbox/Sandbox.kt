@@ -1,11 +1,12 @@
 package com.dpashko.sandbox
 
+import com.badlogic.gdx.Application
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.GL20
 import com.dpashko.sandbox.di.AppComponent
 import com.dpashko.sandbox.di.DaggerAppComponent
-import com.dpashko.sandbox.scene.BaseScene
+import com.dpashko.sandbox.scene.Scene
 
 class Sandbox : ApplicationAdapter() {
 
@@ -13,10 +14,11 @@ class Sandbox : ApplicationAdapter() {
 
     internal companion object {
         @JvmStatic
-        private var activeScene: BaseScene<*>? = null
+        private var activeScene: Scene? = null
     }
 
     override fun create() {
+        Gdx.app.logLevel = Application.LOG_DEBUG
         component = DaggerAppComponent.create().also {
             activeScene = it.testScene
         }
