@@ -1,25 +1,21 @@
-package com.dpashko.sandbox.scene;
+package com.dpashko.sandbox.scene
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.dpashko.sandbox.font.FontsProvider;
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.dpashko.sandbox.font.FontsProvider
 
-public abstract class BaseScene<T extends BaseSceneController> {
+abstract class BaseScene<T : BaseSceneController> protected constructor(protected val controller: T) {
 
-    private final SpriteBatch batch;
-    private final T controller;
+    private val batch: SpriteBatch = SpriteBatch()
 
-    protected BaseScene(final T controller) {
-        this.controller = controller;
-        batch = new SpriteBatch();
+    fun render() {
+        controller.tick()
+        batch.begin()
+        FontsProvider.defaultFont.draw(batch, "FPS: ${Gdx.graphics.framesPerSecond}", 5f, Gdx.graphics.height - 10.toFloat())
+        FontsProvider.defaultFont.draw(batch, "Heap: ${Gdx.app.javaHeap / 1_048_576L} mb.", 75f, Gdx.graphics.height - 10.toFloat())
+        batch.end()
     }
 
-    public void render() {
-        controller.tick();
-        batch.begin();
-        FontsProvider.defaultFont.draw(batch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 5, Gdx.graphics.getHeight() - 10);
-        batch.end();
-    }
+    abstract fun dispose()
 
-    public abstract void dispose();
 }

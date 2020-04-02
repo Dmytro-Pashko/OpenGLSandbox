@@ -1,22 +1,11 @@
-package com.dpashko.sandbox.scene.test;
+package com.dpashko.sandbox.scene.test
 
-import com.dpashko.sandbox.scene.BaseSceneController;
+import com.dpashko.sandbox.scene.BaseSceneController
+import javax.inject.Inject
 
-import javax.inject.Inject;
+class TestSceneController @Inject constructor() : BaseSceneController() {
 
-public class TestSceneController extends BaseSceneController {
+    override fun tick() {}
 
-    @Inject
-    public TestSceneController() {
-    }
-
-    @Override
-    public void tick() {
-
-    }
-
-    @Override
-    public void dispose() {
-
-    }
+    override fun dispose() {}
 }

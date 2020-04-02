@@ -1,9 +1,8 @@
-package com.dpashko.sandbox.scene;
+package com.dpashko.sandbox.scene
 
-public abstract class BaseSceneController {
+abstract class BaseSceneController {
 
-    public abstract void tick();
+    abstract fun tick()
 
-    public abstract void dispose();
-
+    abstract fun dispose()
 }

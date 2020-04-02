@@ -1,20 +1,13 @@
-package com.dpashko.sandbox.scene.test;
+package com.dpashko.sandbox.scene.test
 
-import com.dpashko.sandbox.scene.BaseScene;
+import com.dpashko.sandbox.scene.BaseScene
+import javax.inject.Inject
 
-import javax.inject.Inject;
+class TestScene @Inject constructor(controller: TestSceneController) :
+        BaseScene<TestSceneController>(controller) {
 
-public class TestScene extends BaseScene<TestSceneController> {
 
-    private TestSceneController controller = new TestSceneController();
-
-    @Inject
-    TestScene(final TestSceneController controller) {
-        super(controller);
-    }
-
-    @Override
-    public void dispose() {
-        controller.dispose();
+    override fun dispose() {
+        controller.dispose()
     }
 }
