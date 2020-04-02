@@ -18,6 +18,10 @@ class DebugScene @Inject protected constructor() : Scene {
             return (Gdx.app.javaHeap / 1024L)
         }
 
+    override fun init() {
+
+    }
+
     override fun render() {
         batch.begin()
         FontsProvider.defaultFont.draw(batch, "FPS: $fps", 5f, Gdx.graphics.height - 10.toFloat())
