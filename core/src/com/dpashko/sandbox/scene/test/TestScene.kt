@@ -9,10 +9,8 @@ import com.badlogic.gdx.graphics.g3d.ModelBatch
 import com.badlogic.gdx.graphics.g3d.ModelInstance
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute
 import com.badlogic.gdx.graphics.g3d.environment.PointLight
-import com.badlogic.gdx.graphics.g3d.utils.CameraInputController
 import com.badlogic.gdx.math.Vector3
 import com.dpashko.sandbox.font.FontsProvider
-import com.dpashko.sandbox.models.MaterialFactory
 import com.dpashko.sandbox.models.ModelsFactory
 import com.dpashko.sandbox.objects.WorldObject
 import com.dpashko.sandbox.scene.Scene
@@ -22,8 +20,8 @@ import javax.inject.Inject
 
 class TestScene @Inject protected constructor(
         private val debugScene: DebugScene,
-        private val camera: PerspectiveCamera,
-        private val controller: TestSceneController
+        private val camera: PerspectiveCamera
+//        private val controller: TestSceneController
 ) : Scene {
 
     private val batch = ModelBatch()
@@ -34,6 +32,7 @@ class TestScene @Inject protected constructor(
     private val cameraDir: Vector3 = Vector3(0.03f, 0.84f, -0.53f)
 
     private val objects: MutableList<WorldObject> = LinkedList()
+    private var inputController: TestController? = null
 
     private val environment = Environment().apply {
         set(ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f))
@@ -47,21 +46,11 @@ class TestScene @Inject protected constructor(
         camera.near = 1f
         camera.far = 300f
 
-        val controller = CameraInputController(camera).apply {
+        inputController = TestController(camera).apply {
+            Gdx.input.inputProcessor = this
         }
-        Gdx.input.inputProcessor = controller
+        camera.update()
         initAxises()
-
-        objects.add(WorldObject(worldOrigin, ModelInstance(ModelsFactory.cylinderModel).also {
-            it.materials.add(MaterialFactory.diffuse(Color.GRAY))
-            it.transform.set(Vector3.X, Vector3.Y, Vector3.Z, Vector3(-1f, 0f, 0f))
-        }))
-
-        objects.add(WorldObject(worldOrigin, ModelInstance(ModelsFactory.sphereModel).also {
-            it.materials.add(MaterialFactory.diffuse(Color.GRAY))
-            it.transform.set(Vector3.X, Vector3.Y, Vector3.Z, Vector3(-1f, 2f, 1f))
-        }))
-
         objects.add(WorldObject(worldOrigin, ModelInstance(ModelsFactory.wallModel).also {
             it.transform.set(Vector3.X, Vector3.Y, Vector3.Z, Vector3(0f, 0f, 0f))
         }))
@@ -74,7 +63,9 @@ class TestScene @Inject protected constructor(
     }
 
     override fun render() {
+//        controller.update()
         debugScene.render()
+        inputController?.update()
         camera.update()
         batch.begin(camera)
         for (obj in objects) {
@@ -92,7 +83,7 @@ class TestScene @Inject protected constructor(
     }
 
     override fun dispose() {
-        controller.dispose()
+//        controller.dispose()
         debugScene.dispose()
     }
 }
