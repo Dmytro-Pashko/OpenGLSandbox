@@ -26,7 +26,7 @@ public class CameraController extends InputAdapter {
     /**
      * The units to translate the camera when moved the full width or height of the screen.
      */
-    public float translateUnits = 10f; // FIXME auto calculate this based on the target
+    public float translateUnits = 15f; // FIXME auto calculate this based on the target
 
     /**
      * The key which must be pressed to activate rotate, translate and forward or 0 to always activate.
@@ -136,7 +136,7 @@ public class CameraController extends InputAdapter {
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        touched &= -1 ^ (1 << pointer);
+        touched &= ~(1 << pointer);
         multiTouch = !MathUtils.isPowerOfTwo(touched);
         if (button == this.button) this.button = -1;
         return super.touchUp(screenX, screenY, pointer, button) || activatePressed;

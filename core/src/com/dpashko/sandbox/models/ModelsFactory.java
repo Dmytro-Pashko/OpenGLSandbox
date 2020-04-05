@@ -18,23 +18,20 @@ public class ModelsFactory {
     public static Model groundModel = objLoader.loadModel(FilesProvider.ground);
 
     @NotNull
-    public static ModelInstance createXAxisModel() {
-        final Model model = builder.createBox(50f, .02f, .02f, MaterialFactory.diffuse(Color.RED), VertexAttributes.Usage.Position);
-        final ModelInstance instance = new ModelInstance(model);
-        return instance;
+    public static ModelInstance createXAxisModel(final float size) {
+        final Model model = builder.createBox(size, .02f, .02f, MaterialFactory.diffuse(Color.RED), VertexAttributes.Usage.Position);
+        return new ModelInstance(model);
     }
 
     @NotNull
-    public static ModelInstance createYAxisModel() {
-        final Model model = builder.createBox(.02f, 50f, .02f, MaterialFactory.diffuse(Color.GREEN), VertexAttributes.Usage.Position);
-        final ModelInstance instance = new ModelInstance(model);
-        return instance;
+    public static ModelInstance createYAxisModel(final float size) {
+        final Model model = builder.createBox(.02f, size, .02f, MaterialFactory.diffuse(Color.GREEN), VertexAttributes.Usage.Position);
+        return new ModelInstance(model);
     }
 
     @NotNull
-    public static ModelInstance createZAxisModel() {
-        final Model model = builder.createBox(.02f, .02f, 50f, MaterialFactory.diffuse(Color.BLUE), VertexAttributes.Usage.Position);
-        final ModelInstance instance = new ModelInstance(model);
-        return instance;
+    public static ModelInstance createZAxisModel(final float size) {
+        final Model model = builder.createBox(.02f, .02f, size, MaterialFactory.diffuse(Color.BLUE), VertexAttributes.Usage.Position);
+        return new ModelInstance(model);
     }
 }
