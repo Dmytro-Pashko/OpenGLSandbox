@@ -18,7 +18,6 @@ public class SkyBox implements Disposable {
     protected int u_worldTrans;
     protected Mesh quad;
     private Matrix4 worldTrans;
-    private Quaternion q;
 
     protected String vertexShader = " attribute vec3 a_position; \n" +
             " attribute vec3 a_normal; \n" +
@@ -80,13 +79,9 @@ public class SkyBox implements Disposable {
         shader = new ShaderProgram(vertexShader, fragmentShader);
         if (!shader.isCompiled())
             throw new GdxRuntimeException(shader.getLog());
-
         u_worldTrans = shader.getUniformLocation("u_worldTrans");
-
         quad = createQuad();
         worldTrans = new Matrix4();
-        q = new Quaternion();
-
         initCubemap();
     }
 
