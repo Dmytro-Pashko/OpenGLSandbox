@@ -10,6 +10,8 @@ import com.badlogic.gdx.graphics.g3d.ModelInstance
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute
 import com.badlogic.gdx.graphics.g3d.environment.PointLight
 import com.badlogic.gdx.math.Vector3
+import com.dpashko.sandbox.cubemap.SkyBox
+import com.dpashko.sandbox.files.FilesProvider
 import com.dpashko.sandbox.font.FontsProvider
 import com.dpashko.sandbox.models.ModelsFactory
 import com.dpashko.sandbox.scene.Scene
@@ -28,10 +30,11 @@ class TestScene @Inject protected constructor(
     private val spriteBatch = SpriteBatch();
     private var inputController = CameraController(camera)
     private val debugObjects = LinkedList<ModelInstance>()
+    private val skybox = SkyBox(FilesProvider.skybox)
 
     private val environment = Environment().apply {
         set(ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f))
-        add(PointLight().set(Color.WHITE, Vector3(5f, 0f, 5f), 10f))
+        add(PointLight().set(Color.WHITE, Vector3(32f, 0f, 32f), 500f))
     }
 
     override fun init() {
@@ -45,6 +48,7 @@ class TestScene @Inject protected constructor(
             rotate(Vector3.Z, -15f)
             update()
         }
+
         initAxises()
         initWorldObjects()
     }
@@ -61,6 +65,9 @@ class TestScene @Inject protected constructor(
 
     override fun render() {
         inputController.update()
+
+        skybox.render(camera)
+
         batch.begin(camera)
         for (obj in debugObjects) {
             batch.render(obj, environment)

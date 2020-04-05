@@ -27,7 +27,7 @@ class Sandbox : ApplicationAdapter() {
     }
 
     override fun render() {
-        Gdx.gl30.glClearColor(0f, 0f, 0f, 1f)
+//        Gdx.gl30.glClearColor(0f, 0f, 0f, 1f)
         Gdx.gl30.glClear(GL30.GL_COLOR_BUFFER_BIT or GL30.GL_DEPTH_BUFFER_BIT)
         activeScene?.render()
     }

@@ -53,7 +53,7 @@ public class CameraController extends InputAdapter {
     /**
      * Maximal camera position by Z axis.
      */
-    public float maxZoom = 10.0f;
+    public float maxZoom = 50.0f;
 
     /**
      * The target to rotate around.
