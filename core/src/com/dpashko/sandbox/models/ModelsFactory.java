@@ -15,32 +15,45 @@ public class ModelsFactory {
 
     private final static ModelBuilder builder = new ModelBuilder();
     private static final ObjLoader objLoader = new ObjLoader();
+    private static ModelInstance cachedBoxModel = null;
+    private static ModelInstance cachedCylinderModel = null;
+    private static ModelInstance cachedSphereModel = null;
 
     @NotNull
-    public static ModelInstance createSphere(final Material material) {
-        return loadModel(FilesProvider.sphereModel, material);
+    public static ModelInstance createSphere() {
+        if (cachedSphereModel == null) {
+            cachedSphereModel = loadModel(FilesProvider.sphereModel, null);
+        }
+        return cachedSphereModel.copy();
     }
 
     @NotNull
-    public static ModelInstance createBox(final Material material) {
-        return loadModel(FilesProvider.boxModel, material);
+    public static ModelInstance createBox() {
+        if (cachedBoxModel == null) {
+            cachedBoxModel = loadModel(FilesProvider.boxModel, null);
+        }
+        return cachedBoxModel.copy();
     }
 
     @NotNull
-    public static ModelInstance createCylinder(final Material material) {
-        return loadModel(FilesProvider.cylinderModel, material);
+    public static ModelInstance createCylinder() {
+        if (cachedCylinderModel == null) {
+            cachedCylinderModel = loadModel(FilesProvider.cylinderModel, null);
+        }
+        return cachedCylinderModel.copy();
     }
 
     @NotNull
     public static ModelInstance loadGround() {
-        return new ModelInstance(objLoader.loadModel(FilesProvider.ground, true));
+        return loadModel(FilesProvider.ground, null);
     }
 
     @NotNull
     public static ModelInstance loadModel(final FileHandle file, final Material material) {
-        final Model model = objLoader.loadModel(file);
+        final Model model = objLoader.loadModel(file, true);
         model.materials.clear();
-        model.materials.add(material);
+        if (material != null)
+            model.materials.add(material);
         return new ModelInstance(model);
     }
 

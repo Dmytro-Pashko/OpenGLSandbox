@@ -1,10 +1,8 @@
 package com.dpashko.sandbox.scene.test
 
-import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.VertexAttributes
 import com.badlogic.gdx.graphics.g3d.ModelInstance
 import com.badlogic.gdx.math.Vector3
-import com.dpashko.sandbox.models.MaterialFactory
 import com.dpashko.sandbox.models.ModelsFactory
 import com.dpashko.sandbox.objects.WorldObject
 import com.dpashko.sandbox.scene.Controller
@@ -38,7 +36,7 @@ class TestSceneController @Inject constructor() : Controller {
                         val y = vertices[i + 1]
                         val z = vertices[i + 2]
 
-                        objects.add(WorldObject(ModelsFactory.createBox(MaterialFactory.diffuse(Color.GREEN)).also {
+                        objects.add(WorldObject(ModelsFactory.createBox().also {
                             it.transform.set(Vector3.X, Vector3.Y, Vector3.Z, Vector3(x, y, z))
                         }))
                     }
