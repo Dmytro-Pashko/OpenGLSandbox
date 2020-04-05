@@ -65,9 +65,7 @@ class TestScene @Inject protected constructor(
 
     override fun render() {
         inputController.update()
-
         skybox.render(camera)
-
         batch.begin(camera)
         for (obj in debugObjects) {
             batch.render(obj, environment)
