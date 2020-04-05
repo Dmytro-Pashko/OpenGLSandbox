@@ -21,18 +21,17 @@ import javax.inject.Inject
 class TestScene @Inject protected constructor(
         private val debugScene: DebugScene,
         private val camera: PerspectiveCamera
-//        private val controller: TestSceneController
 ) : Scene {
 
     private val batch = ModelBatch()
     private val spriteBatch = SpriteBatch();
 
     private val worldOrigin = Vector3(0f, 0f, 0f)
-    private val cameraPosition: Vector3 = Vector3(.60f, -5.3f, 4.41f)
-    private val cameraDir: Vector3 = Vector3(0.03f, 0.84f, -0.53f)
+    private val cameraPosition: Vector3 = Vector3(-2.5f, -2.5f, 5f)
+    private val cameraDir: Vector3 = Vector3(2.5f, 2.5f, 0f)
 
     private val objects: MutableList<WorldObject> = LinkedList()
-    private var inputController: TestController? = null
+    private var inputController: CameraController? = null
 
     private val environment = Environment().apply {
         set(ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f))
@@ -45,13 +44,15 @@ class TestScene @Inject protected constructor(
         camera.lookAt(cameraDir)
         camera.near = 1f
         camera.far = 300f
+        camera.rotate(Vector3(Vector3.Y), 45f)
+        camera.rotate(Vector3(Vector3.Z), -45f)
 
-        inputController = TestController(camera).apply {
+        inputController = CameraController(camera).apply {
             Gdx.input.inputProcessor = this
         }
         camera.update()
         initAxises()
-        objects.add(WorldObject(worldOrigin, ModelInstance(ModelsFactory.wallModel).also {
+        objects.add(WorldObject(worldOrigin, ModelInstance(ModelsFactory.groundModel).also {
             it.transform.set(Vector3.X, Vector3.Y, Vector3.Z, Vector3(0f, 0f, 0f))
         }))
     }
@@ -63,9 +64,10 @@ class TestScene @Inject protected constructor(
     }
 
     override fun render() {
-//        controller.update()
+
         debugScene.render()
         inputController?.update()
+
         camera.update()
         batch.begin(camera)
         for (obj in objects) {
@@ -78,12 +80,11 @@ class TestScene @Inject protected constructor(
     private fun drawCameraPos() {
         spriteBatch.begin()
         FontsProvider.defaultFont.draw(spriteBatch, "Cam pos${camera.position}", 250f, Gdx.graphics.height - 10.toFloat())
-        FontsProvider.defaultFont.draw(spriteBatch, "Cam dir${camera.direction}", 250f, Gdx.graphics.height - 25.toFloat())
+        FontsProvider.defaultFont.draw(spriteBatch, "Target${inputController?.target}", 250f, Gdx.graphics.height - 35.toFloat())
         spriteBatch.end()
     }
 
     override fun dispose() {
-//        controller.dispose()
         debugScene.dispose()
     }
 }

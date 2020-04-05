@@ -2,14 +2,22 @@ package com.dpashko.sandbox.scene.test;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
-public class TestController extends GestureDetector {
+public class CameraController extends InputAdapter {
 
+    /**
+     * The button for rotating the camera.
+     */
+    public int rotateButton = Input.Buttons.RIGHT;
+
+    /**
+     * The angle to rotate when moved the full width or height of the screen.
+     */
+    public float rotateAngle = 90f;
 
     /**
      * The button for translating the camera along the up/right plane
@@ -19,10 +27,7 @@ public class TestController extends GestureDetector {
      * The units to translate the camera when moved the full width or height of the screen.
      */
     public float translateUnits = 10f; // FIXME auto calculate this based on the target
-    /**
-     * The button for translating the camera along the direction axis
-     */
-    public int forwardButton = Input.Buttons.MIDDLE;
+
     /**
      * The key which must be pressed to activate rotate, translate and forward or 0 to always activate.
      */
@@ -40,17 +45,16 @@ public class TestController extends GestureDetector {
      */
     public float scrollFactor = -0.1f;
 
+    /**
+     * Minimal camera position by Z axis.
+     */
     public float minZoom = 2.0f;
-    public float maxZoom = 10.0f;
 
     /**
-     * World units per screen size
+     * Maximal camera position by Z axis.
      */
-    public float pinchZoomFactor = 10f;
-    /**
-     * Whether to update the camera after it has been changed.
-     */
-    public boolean autoUpdate = true;
+    public float maxZoom = 10.0f;
+
     /**
      * The target to rotate around.
      */
@@ -75,81 +79,41 @@ public class TestController extends GestureDetector {
 
     private float startX, startY;
     private final Vector3 tmpV1 = new Vector3();
+    private final Vector3 tmpV2 = new Vector3();
 
-    protected static class CameraGestureListener extends GestureAdapter {
-        public TestController controller;
-        private float previousZoom;
-
-        @Override
-        public boolean touchDown(float x, float y, int pointer, int button) {
-            previousZoom = 0;
-            return false;
-        }
-
-        @Override
-        public boolean tap(float x, float y, int count, int button) {
-            return false;
-        }
-
-        @Override
-        public boolean longPress(float x, float y) {
-            return false;
-        }
-
-        @Override
-        public boolean fling(float velocityX, float velocityY, int button) {
-            return false;
-        }
-
-        @Override
-        public boolean pan(float x, float y, float deltaX, float deltaY) {
-            return false;
-        }
-
-        @Override
-        public boolean zoom(float initialDistance, float distance) {
-            float newZoom = distance - initialDistance;
-            float amount = newZoom - previousZoom;
-            previousZoom = newZoom;
-            float w = Gdx.graphics.getWidth(), h = Gdx.graphics.getHeight();
-            return controller.pinchZoom(amount / ((w > h) ? h : w));
-        }
-
-        @Override
-        public boolean pinch(Vector2 initialPointer1, Vector2 initialPointer2, Vector2 pointer1, Vector2 pointer2) {
-            return false;
-        }
-    }
-
-    protected final TestController.CameraGestureListener gestureListener;
-
-    protected TestController(final TestController.CameraGestureListener gestureListener, final Camera camera) {
-        super(gestureListener);
-        this.gestureListener = gestureListener;
-        this.gestureListener.controller = this;
+    public CameraController(final Camera camera) {
+        super();
         this.camera = camera;
-    }
-
-    public TestController(final Camera camera) {
-        this(new TestController.CameraGestureListener(), camera);
     }
 
     public void update() {
         if (forwardRight || forwardLeft || forwardPressed || backwardPressed) {
             final float delta = Gdx.graphics.getDeltaTime();
+
+            tmpV1.set(camera.direction).scl(translateUnits).z = 0;
+
             if (forwardRight) {
-                camera.translate(delta * translateUnits, 0, 0);
+                tmpV2.set(tmpV1).scl(-delta).rotate(Vector3.Z, 90);
+                camera.translate(tmpV2);
+                target.add(tmpV2);
             }
             if (forwardLeft) {
-                camera.translate(-delta * translateUnits, 0, 0);
+                tmpV2.set(tmpV1).scl(delta).rotate(Vector3.Z, 90);
+                camera.translate(tmpV2);
+                target.add(tmpV2);
             }
+
             if (forwardPressed) {
-                camera.translate(0, delta * translateUnits, 0);
+                tmpV1.scl(delta);
+                camera.translate(tmpV1);
+                target.add(tmpV1);
             }
             if (backwardPressed) {
-                camera.translate(0, -delta * translateUnits, 0);
+                tmpV1.scl(-delta);
+                camera.translate(tmpV1);
+                target.add(tmpV1);
             }
-            if (autoUpdate) camera.update();
+            camera.update();
         }
     }
 
@@ -179,11 +143,17 @@ public class TestController extends GestureDetector {
     }
 
     protected boolean process(float deltaX, float deltaY, int button) {
-
         if (button == translateButton) {
-            camera.translate(-deltaX * translateUnits, -deltaY * translateUnits, 0);
+            tmpV1.set(camera.direction).crs(camera.up).nor().scl(-deltaX * translateUnits).z = 0;
+            camera.translate(tmpV1);
+            tmpV2.set(camera.up).scl(-deltaY * translateUnits).z = 0;
+            camera.translate(tmpV2);
+            target.add(tmpV1).add(tmpV2);
         }
-        if (autoUpdate) camera.update();
+        if (button == rotateButton) {
+            camera.rotateAround(target, Vector3.Z, -deltaX * rotateAngle);
+        }
+        camera.update();
         return true;
     }
 
@@ -208,7 +178,7 @@ public class TestController extends GestureDetector {
             if (!alwaysScroll && activateKey != 0 && !activatePressed) return false;
             camera.translate(tmpV1.set(camera.direction).scl(amount));
 
-            if (autoUpdate) camera.update();
+            camera.update();
             return true;
         } else {
             return false;
@@ -221,10 +191,6 @@ public class TestController extends GestureDetector {
 
     public boolean isCanZoomOut(float amount) {
         return camera.position.z < maxZoom && amount < 0;
-    }
-
-    protected boolean pinchZoom(float amount) {
-        return zoom(pinchZoomFactor * amount);
     }
 
     @Override

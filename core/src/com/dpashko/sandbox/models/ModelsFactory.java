@@ -15,8 +15,7 @@ public class ModelsFactory {
     private static final ObjLoader objLoader = new ObjLoader();
 
     public static Model sphereModel = objLoader.loadModel(FilesProvider.sphereModel);
-    public static Model cylinderModel = objLoader.loadModel(FilesProvider.cylinderModel);
-    public static Model wallModel = objLoader.loadModel(FilesProvider.wallModel);
+    public static Model groundModel = objLoader.loadModel(FilesProvider.ground);
 
     @NotNull
     public static ModelInstance createXAxisModel() {
