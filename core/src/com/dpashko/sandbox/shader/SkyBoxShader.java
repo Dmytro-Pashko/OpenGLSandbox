@@ -1,4 +1,4 @@
-package com.dpashko.sandbox.cubemap;
+package com.dpashko.sandbox.shader;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
@@ -10,7 +10,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
-public class SkyBox implements Disposable {
+public class SkyBoxShader implements Disposable {
 
     protected final Pixmap[] data = new Pixmap[6];
     protected ShaderProgram shader;
@@ -19,73 +19,50 @@ public class SkyBox implements Disposable {
     protected Mesh quad;
     private Matrix4 worldTrans;
 
-    protected String vertexShader = " attribute vec3 a_position; \n" +
-            " attribute vec3 a_normal; \n" +
-            " attribute vec2 a_texCoord0; \n" +
-            " uniform mat4 u_worldTrans; \n" +
-            " varying vec2 v_texCoord0; \n" +
-            " varying vec3 v_cubeMapUV; \n" +
-            " void main() { \n" +
-            "     v_texCoord0 = a_texCoord0;     \n" +
-            "     vec4 g_position = u_worldTrans * vec4(a_position, 1.0); \n" +
-            "     v_cubeMapUV = normalize(g_position.xyz); \n" +
-            "     gl_Position = vec4(a_position, 1.0); \n" +
-            " } \n";
-
-    protected String fragmentShader = "#ifdef GL_ES \n" +
-            " precision mediump float; \n" +
-            " #endif \n" +
-            " uniform samplerCube u_environmentCubemap; \n" +
-            " varying vec2 v_texCoord0; \n" +
-            " varying vec3 v_cubeMapUV; \n" +
-            " void main() {      \n" +
-            "   gl_FragColor = vec4(textureCube(u_environmentCubemap, v_cubeMapUV).rgb, 1.0);   \n" +
-            " } \n";
-
-    public SkyBox(final FileHandle skybox) {
-        this(new Pixmap(skybox));
+    public SkyBoxShader(final FileHandle skyBox) {
+        this(new Pixmap(skyBox));
     }
 
-    public SkyBox(Pixmap cubemap) {
-        int w = cubemap.getWidth();
-        int h = cubemap.getHeight();
+    private SkyBoxShader(final Pixmap skyBox) {
+        int w = skyBox.getWidth();
+        int h = skyBox.getHeight();
         for (int i = 0; i < 6; i++) data[i] = new Pixmap(w / 4, h / 3, Pixmap.Format.RGB888);
         for (int x = 0; x < w; x++)
             for (int y = 0; y < h; y++) {
                 //-X
-                if (x >= 0 && x <= w / 4 && y >= h / 3 && y <= h * 2 / 3)
-                    data[1].drawPixel(x, y - h / 3, cubemap.getPixel(x, y));
+                if (x <= w / 4 && y >= h / 3 && y <= h * 2 / 3)
+                    data[1].drawPixel(x, y - h / 3, skyBox.getPixel(x, y));
                 //+Y
-                if (x >= w / 4 && x <= w / 2 && y >= 0 && y <= h / 3)
-                    data[2].drawPixel(x - w / 4, y, cubemap.getPixel(x, y));
+                if (x >= w / 4 && x <= w / 2 && y <= h / 3)
+                    data[2].drawPixel(x - w / 4, y, skyBox.getPixel(x, y));
                 //+Z
                 if (x >= w / 4 && x <= w / 2 && y >= h / 3 && y <= h * 2 / 3)
-                    data[4].drawPixel(x - w / 4, y - h / 3, cubemap.getPixel(x, y));
+                    data[4].drawPixel(x - w / 4, y - h / 3, skyBox.getPixel(x, y));
                 //-Y
-                if (x >= w / 4 && x <= w / 2 && y >= h * 2 / 3 && y <= h)
-                    data[3].drawPixel(x - w / 4, y - h * 2 / 3, cubemap.getPixel(x, y));
+                if (x >= w / 4 && x <= w / 2 && y >= h * 2 / 3)
+                    data[3].drawPixel(x - w / 4, y - h * 2 / 3, skyBox.getPixel(x, y));
                 //+X
                 if (x >= w / 2 && x <= w * 3 / 4 && y >= h / 3 && y <= h * 2 / 3)
-                    data[0].drawPixel(x - w / 2, y - h / 3, cubemap.getPixel(x, y));
+                    data[0].drawPixel(x - w / 2, y - h / 3, skyBox.getPixel(x, y));
                 //-Z
-                if (x >= w * 3 / 4 && x <= w && y >= h / 3 && y <= h * 2 / 3)
-                    data[5].drawPixel(x - w * 3 / 4, y - h / 3, cubemap.getPixel(x, y));
+                if (x >= w * 3 / 4 && y >= h / 3 && y <= h * 2 / 3)
+                    data[5].drawPixel(x - w * 3 / 4, y - h / 3, skyBox.getPixel(x, y));
             }
-        cubemap.dispose();
+        skyBox.dispose();
         init();
     }
 
     private void init() {
-        shader = new ShaderProgram(vertexShader, fragmentShader);
+        shader = ShaderProvider.getSkyBoxShader();
         if (!shader.isCompiled())
             throw new GdxRuntimeException(shader.getLog());
         u_worldTrans = shader.getUniformLocation("u_worldTrans");
         quad = createQuad();
         worldTrans = new Matrix4();
-        initCubemap();
+        initShader();
     }
 
-    private void initCubemap() {
+    private void initShader() {
         Gdx.gl20.glBindTexture(GL20.GL_TEXTURE_CUBE_MAP, 0);
         Gdx.gl20.glTexImage2D(GL20.GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, GL20.GL_RGB, data[0].getWidth(),
                 data[0].getHeight(), 0, GL20.GL_RGB, GL20.GL_UNSIGNED_BYTE, data[0].getPixels());
@@ -125,18 +102,30 @@ public class SkyBox implements Disposable {
 
         shader.begin();
         shader.setUniformMatrix(u_worldTrans, worldTrans.translate(0, 0, -1));
-
         quad.render(shader, GL20.GL_TRIANGLES);
         shader.end();
     }
 
     public Mesh createQuad() {
-        Mesh mesh = new Mesh(true, 4, 6, VertexAttribute.Position(), VertexAttribute.ColorUnpacked(), VertexAttribute.TexCoords(0));
+        Mesh mesh = new Mesh(true, 4, 6,
+                VertexAttribute.Position(),
+                VertexAttribute.ColorUnpacked(),
+                VertexAttribute.TexCoords(0));
+
         mesh.setVertices(new float[]
-                {-1f, -1f, 0, 1, 1, 1, 1, 0, 1,
-                        1f, -1f, 0, 1, 1, 1, 1, 1, 1,
-                        1f, 1f, 0, 1, 1, 1, 1, 1, 0,
-                        -1f, 1f, 0, 1, 1, 1, 1, 0, 0});
+                {
+                        -1f, -1f, 0,
+                        1, 1, 1,
+                        1, 0, 1,
+                        1f, -1f, 0,
+                        1, 1, 1,
+                        1, 1, 1,
+                        1f, 1f, 0,
+                        1, 1, 1,
+                        1, 1, 0,
+                        -1f, 1f, 0,
+                        1, 1, 1,
+                        1, 0, 0});
         mesh.setIndices(new short[]{0, 1, 2, 2, 3, 0});
         return mesh;
     }
@@ -148,5 +137,4 @@ public class SkyBox implements Disposable {
         for (int i = 0; i < 6; i++)
             data[i].dispose();
     }
-
 }

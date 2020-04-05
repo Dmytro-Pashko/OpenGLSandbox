@@ -18,4 +18,8 @@ public class FilesProvider {
 
     public static FileHandle ground = Gdx.files.internal("models/ground.obj");
 
+    //Shaders
+    public static FileHandle skybox_vertex_shader = Gdx.files.internal("shaders/skybox_vertex_shader.glsl");
+    public static FileHandle skybox_fragment_shader = Gdx.files.internal("shaders/skybox_fragment_shader.glsl");
+
 }

@@ -3,7 +3,7 @@ package com.dpashko.sandbox.scene.test
 import com.badlogic.gdx.graphics.VertexAttributes
 import com.badlogic.gdx.graphics.g3d.ModelInstance
 import com.badlogic.gdx.math.Vector3
-import com.dpashko.sandbox.models.ModelsFactory
+import com.dpashko.sandbox.model.ModelsProvider
 import com.dpashko.sandbox.objects.WorldObject
 import com.dpashko.sandbox.scene.Controller
 import java.util.*
@@ -20,7 +20,7 @@ class TestSceneController @Inject constructor() : Controller {
     private var ground: ModelInstance? = null
 
     override fun init() {
-        ground = ModelsFactory.loadGround().apply {
+        ground = ModelsProvider.loadGround().apply {
             transform.set(Vector3.X, Vector3.Y, Vector3.Z, WORLD_ORIGIN)
             objects.add(WorldObject(this))
 
@@ -36,7 +36,7 @@ class TestSceneController @Inject constructor() : Controller {
                         val y = vertices[i + 1]
                         val z = vertices[i + 2]
 
-                        objects.add(WorldObject(ModelsFactory.createBox().also {
+                        objects.add(WorldObject(ModelsProvider.createBox().also {
                             it.transform.set(Vector3.X, Vector3.Y, Vector3.Z, Vector3(x, y, z))
                         }))
                     }
