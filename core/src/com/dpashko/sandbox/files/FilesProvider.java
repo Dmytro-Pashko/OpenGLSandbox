@@ -9,7 +9,7 @@ public class FilesProvider {
     public static FileHandle mainFont = Gdx.files.internal("fonts/main.fnt");
 
     //Textures
-    public static FileHandle skybox = Gdx.files.internal("textures/skybox.jpg");
+    public static FileHandle skybox = Gdx.files.internal("textures/skybox_field.jpg");
 
     //Models
     public static FileHandle cylinderModel = Gdx.files.internal("models/cylinder.obj");

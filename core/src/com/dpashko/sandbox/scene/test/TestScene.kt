@@ -3,34 +3,29 @@ package com.dpashko.sandbox.scene.test
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.PerspectiveCamera
-import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g3d.Environment
 import com.badlogic.gdx.graphics.g3d.ModelBatch
 import com.badlogic.gdx.graphics.g3d.ModelInstance
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute
 import com.badlogic.gdx.graphics.g3d.environment.PointLight
 import com.badlogic.gdx.math.Vector3
-import com.dpashko.sandbox.shader.SkyBoxShader
 import com.dpashko.sandbox.files.FilesProvider
-import com.dpashko.sandbox.font.FontsProvider
-import com.dpashko.sandbox.model.ModelsProvider
 import com.dpashko.sandbox.scene.Scene
-import com.dpashko.sandbox.scene.debug.DebugScene
+import com.dpashko.sandbox.scene.debug.DebugRender
+import com.dpashko.sandbox.shader.SkyBoxShader
 import java.util.*
 import javax.inject.Inject
 
 class TestScene @Inject protected constructor(
-        private val debugScene: DebugScene,
+        private val debugRender: DebugRender,
         private val camera: PerspectiveCamera,
         private val controller: TestSceneController
 ) : Scene {
 
-    private val cameraPositionLabel = "Camera Position: %s"
     private val batch = ModelBatch()
-    private val spriteBatch = SpriteBatch();
     private var inputController = CameraController(camera)
     private val debugObjects = LinkedList<ModelInstance>()
-    private val skybox = SkyBoxShader(FilesProvider.skybox)
+    private val skyBox = SkyBoxShader(FilesProvider.skybox)
 
     private val environment = Environment().apply {
         set(ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f))
@@ -38,7 +33,7 @@ class TestScene @Inject protected constructor(
     }
 
     override fun init() {
-        debugScene.init()
+        debugRender.init()
         Gdx.input.inputProcessor = inputController
         camera.apply {
             near = 1f
@@ -48,15 +43,7 @@ class TestScene @Inject protected constructor(
             rotate(Vector3.Z, -15f)
             update()
         }
-
-        initAxises()
         initWorldObjects()
-    }
-
-    private fun initAxises() {
-        debugObjects.add(ModelsProvider.createXAxisModel(controller.getWorldSize()))
-        debugObjects.add(ModelsProvider.createYAxisModel(controller.getWorldSize()))
-        debugObjects.add(ModelsProvider.createZAxisModel(controller.getWorldSize()))
     }
 
     private fun initWorldObjects() {
@@ -65,24 +52,13 @@ class TestScene @Inject protected constructor(
 
     override fun render() {
         inputController.update()
-        skybox.render(camera)
+        skyBox.render(camera)
         batch.begin(camera)
-        for (obj in debugObjects) {
-            batch.render(obj, environment)
-        }
         for (obj in controller.objects) {
             batch.render(obj.model, environment)
         }
         batch.end()
-        drawCameraPos()
-        debugScene.render()
-    }
-
-    private fun drawCameraPos() {
-        spriteBatch.begin()
-        FontsProvider.defaultFont.draw(spriteBatch, cameraPositionLabel.format(camera.position),
-                250f, Gdx.graphics.height - 10.toFloat())
-        spriteBatch.end()
+        debugRender.render(camera)
     }
 
     override fun dispose() {
@@ -90,6 +66,6 @@ class TestScene @Inject protected constructor(
             obj.model?.dispose()
         }
         controller.dispose()
-        debugScene.dispose()
+        debugRender.dispose()
     }
 }

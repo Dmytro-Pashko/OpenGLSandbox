@@ -12,11 +12,11 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 
 public class SkyBoxShader implements Disposable {
 
-    protected final Pixmap[] data = new Pixmap[6];
-    protected ShaderProgram shader;
+    private final Pixmap[] data = new Pixmap[6];
+    private ShaderProgram shader;
 
-    protected int u_worldTrans;
-    protected Mesh quad;
+    private int u_worldTrans;
+    private Mesh quad;
     private Matrix4 worldTrans;
 
     public SkyBoxShader(final FileHandle skyBox) {
@@ -106,7 +106,7 @@ public class SkyBoxShader implements Disposable {
         shader.end();
     }
 
-    public Mesh createQuad() {
+    private Mesh createQuad() {
         Mesh mesh = new Mesh(true, 4, 6,
                 VertexAttribute.Position(),
                 VertexAttribute.ColorUnpacked(),
@@ -114,18 +114,11 @@ public class SkyBoxShader implements Disposable {
 
         mesh.setVertices(new float[]
                 {
-                        -1f, -1f, 0,
-                        1, 1, 1,
-                        1, 0, 1,
-                        1f, -1f, 0,
-                        1, 1, 1,
-                        1, 1, 1,
-                        1f, 1f, 0,
-                        1, 1, 1,
-                        1, 1, 0,
-                        -1f, 1f, 0,
-                        1, 1, 1,
-                        1, 0, 0});
+                        -1f, -1f, 0, 1, 1, 1, 1, 0, 1,
+                        1f, -1f, 0, 1, 1, 1, 1, 1, 1,
+                        1f, 1f, 0, 1, 1, 1, 1, 1, 0,
+                        -1f, 1f, 0, 1, 1, 1, 1, 0, 0
+                });
         mesh.setIndices(new short[]{0, 1, 2, 2, 3, 0});
         return mesh;
     }
