@@ -2,9 +2,11 @@ package com.dpashko.sandbox.scene.debug
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Camera
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g3d.ModelBatch
 import com.badlogic.gdx.graphics.g3d.ModelInstance
+import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.utils.Disposable
 import com.dpashko.sandbox.font.FontsProvider
 import com.dpashko.sandbox.model.ModelsProvider
@@ -15,9 +17,22 @@ class DebugRender @Inject protected constructor() : Disposable {
     private val debugObjects = mutableListOf<ModelInstance>()
 
     companion object {
-        const val cameraPositionLabel = "Camera Position: %s"
-        const val fpsLabel = "FPS: %d"
-        const val heapSizeLabel = "Heap: %d kb"
+        const val fpsText = "FPS: %d"
+        const val heapSizeText = "Heap: %d kb"
+        const val cameraPositionText = "Camera Position: %s"
+
+        val fpsLabel = Label("", Label.LabelStyle(FontsProvider.defaultFont, Color.WHITE)).apply {
+            setPosition(5f, 10f)
+        }
+
+        val heapSizeLabel = Label("", Label.LabelStyle(FontsProvider.defaultFont, Color.WHITE)).apply {
+            setPosition(5f, 25f)
+        }
+
+        val cameraPositionLabel = Label("", Label.LabelStyle(FontsProvider.defaultFont, Color.WHITE)).apply {
+            setPosition(5f, 40f)
+        }
+
         private val spriteBatch = SpriteBatch()
         private val modelBatch = ModelBatch()
         private val fps: Int
@@ -30,7 +45,7 @@ class DebugRender @Inject protected constructor() : Disposable {
             }
     }
 
-    public fun init() {
+    fun init() {
         debugObjects.addAll(initAxises())
     }
 
@@ -39,7 +54,7 @@ class DebugRender @Inject protected constructor() : Disposable {
             ModelsProvider.createYAxisModel(64f),
             ModelsProvider.createZAxisModel(64f))
 
-    public fun render(camera: Camera) {
+    fun render(camera: Camera) {
         modelBatch.begin(camera)
         for (debugObject in debugObjects) {
             modelBatch.render(debugObject)
@@ -51,15 +66,17 @@ class DebugRender @Inject protected constructor() : Disposable {
 
     private fun drawCameraPos(camera: Camera) {
         spriteBatch.begin()
-        FontsProvider.defaultFont.draw(spriteBatch, cameraPositionLabel.format(camera.position),
-                250f, Gdx.graphics.height - 10.toFloat())
+        cameraPositionLabel.setText(cameraPositionText.format(camera.position))
+        cameraPositionLabel.draw(spriteBatch, 1f)
         spriteBatch.end()
     }
 
-    public fun render() {
+    fun render() {
         spriteBatch.begin()
-        FontsProvider.defaultFont.draw(spriteBatch, fpsLabel.format(fps), 5f, Gdx.graphics.height - 10.toFloat())
-        FontsProvider.defaultFont.draw(spriteBatch, heapSizeLabel.format(heapSize), 75f, Gdx.graphics.height - 10.toFloat())
+        fpsLabel.setText(fpsText.format(fps))
+        heapSizeLabel.setText(heapSizeText.format(heapSize))
+        fpsLabel.draw(spriteBatch, 1f)
+        heapSizeLabel.draw(spriteBatch, 1f)
         spriteBatch.end()
     }
 
