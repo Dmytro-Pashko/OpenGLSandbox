@@ -20,7 +20,7 @@ class Sandbox : ApplicationAdapter() {
     override fun create() {
         Gdx.app.logLevel = Application.LOG_DEBUG
         component = DaggerAppComponent.create().also {
-            activeScene = it.testScene
+            activeScene = it.model3dScene
         }
         activeScene?.init()
     }

@@ -22,6 +22,7 @@ class TestScene @Inject protected constructor(
         private val controller: TestSceneController
 ) : Scene {
 
+    private val camera = PerspectiveCamera(67f, Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
     private val batch = ModelBatch()
     private var inputController = CameraController(camera)
     private val debugObjects = LinkedList<ModelInstance>()
