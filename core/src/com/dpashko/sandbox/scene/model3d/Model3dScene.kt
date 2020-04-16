@@ -1,4 +1,4 @@
-package com.dpashko.sandbox.scene.test
+package com.dpashko.sandbox.scene.model3d
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
@@ -16,15 +16,14 @@ import com.dpashko.sandbox.shader.SkyBoxShader
 import java.util.*
 import javax.inject.Inject
 
-class TestScene @Inject protected constructor(
+open class Model3dScene @Inject protected constructor(
         private val debugRender: DebugRender,
-        private val camera: PerspectiveCamera,
-        private val controller: TestSceneController
+        private val controller: Model3dController
 ) : Scene {
 
     private val camera = PerspectiveCamera(67f, Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
     private val batch = ModelBatch()
-    private var inputController = CameraController(camera)
+    private var inputController = Model3dCameraController(camera)
     private val debugObjects = LinkedList<ModelInstance>()
     private val skyBox = SkyBoxShader(FilesProvider.skybox)
 

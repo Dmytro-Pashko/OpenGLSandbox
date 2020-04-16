@@ -1,4 +1,4 @@
-package com.dpashko.sandbox.scene.test
+package com.dpashko.sandbox.scene.model3d
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.Camera
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector3
 
-open class CameraController(private var camera: Camera) : InputAdapter() {
+open class Model3dCameraController(private var camera: Camera) : InputAdapter() {
     /**
      * The button for rotating the camera.
      */

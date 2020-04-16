@@ -1,4 +1,4 @@
-package com.dpashko.sandbox.scene.test
+package com.dpashko.sandbox.scene.model3d
 
 import com.badlogic.gdx.graphics.g3d.ModelInstance
 import com.badlogic.gdx.math.Vector3
@@ -8,7 +8,7 @@ import com.dpashko.sandbox.scene.Controller
 import java.util.*
 import javax.inject.Inject
 
-class TestSceneController @Inject constructor() : Controller {
+class Model3dController @Inject constructor() : Controller {
 
     val objects: MutableList<WorldObject> = LinkedList()
     private var ground: ModelInstance? = null
