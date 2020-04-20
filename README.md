@@ -36,7 +36,7 @@ but this does not affect the understanding of the basic OpenGL functionality and
 3. The 3D test scene to test process of loading 3D objects with texture wrapping and custom matertials, enviroment(light) simulation and  custom camera input controller(movement - (WASD + mouse 1), horizontal rotation - mouse 2, zoom - mouse 3). ([link](https://github.com/Dmytro-Pashko/GdxSandbox/blob/feature/gltest/core/src/com/dpashko/sandbox/scene/model3d/Model3dScene.kt))
 
 # Resources:
-All assets from free resources(but you can contact me in any copyright issues) or created by myself.
+All project assets downloaded from free resources(but you can contact me in any copyright issues) or created by myself.
 
 # License:
 This project is licensed under the [Apache 2 License](http://www.apache.org/licenses/LICENSE-2.0.html), meaning you can use it free of charge, without strings attached in commercial and non-commercial projects except assets(fonts, 3d models, textures, sounds, images, shaders) licensed under [CC BY-NC 3.0](https://creativecommons.org/licenses/by-nc-sa/3.0/) license for non-commercial purposes.
