@@ -4,8 +4,8 @@ The 3D engine prototype based on LibGDX ([Link](https://https://libgdx.badlogicg
 
 The main purpose of this repo is to exploring and analyzing the Core API of LibGDX.
 
-In fact, I realized that I need to get a deep knowledge of the OpenGL 
-rendering process and the basic logic of GLSL shaders after analyzing some classes(Camera, Renderers, Shaders)...
+In fact, I realized that I need a deep knowledge of the Math(Vectores, Matrices) OpenGL 
+rendering process and the basic logic of GLSL shaders after analyzing a LibGDX classes.
 
 # Main point
 The main idea is to research basic prototype that can provide the flexible core functionality of the 3D engine:
