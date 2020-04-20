@@ -3,6 +3,7 @@
 The 3D engine prototype based on LibGDX ([Link](https://https://libgdx.badlogicgames.com)) and Kotlin ([Link](https://https://kotlinlang.org)).
 
 The main purpose of this repo is to exploring and analyzing the Core API of LibGDX.
+
 In fact, I realized that I need to get a deep knowledge of the OpenGL 
 rendering process and the basic logic of GLSL shaders after analyzing some classes(Camera, Renderers, Shaders)...
 
