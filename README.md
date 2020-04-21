@@ -32,8 +32,13 @@ this samples based on native "OpenGl" rendering process with custom vertex and f
 but this does not affect the understanding of the basic OpenGL functionality and most of the rendering parts were implemented by self.*
 
 1. The 3D render to traw textured plane with rotation around Z axis.([link](https://github.com/Dmytro-Pashko/GdxSandbox/blob/feature/gltest/core/src/com/dpashko/sandbox/scene/plane3d/Plane3dScene.kt))
+![](https://github.com/Dmytro-Pashko/GdxSandbox/raw/master/description/plane_scene.gif)
+
 2. The 3D render to draw textured boxes in the 3D space with random rotations with Perspective Camera view.([link](https://github.com/Dmytro-Pashko/GdxSandbox/blob/feature/gltest/core/src/com/dpashko/sandbox/scene/box3d/Box3dScene.kt))
+![](https://github.com/Dmytro-Pashko/GdxSandbox/raw/master/description/box_scene.gif)
+
 3. The 3D test scene to test process of loading 3D objects with texture wrapping and custom matertials, enviroment(light) simulation and  custom camera input controller(movement - (WASD + mouse 1), horizontal rotation - mouse 2, zoom - mouse 3). ([link](https://github.com/Dmytro-Pashko/GdxSandbox/blob/feature/gltest/core/src/com/dpashko/sandbox/scene/model3d/Model3dScene.kt))
+![](https://github.com/Dmytro-Pashko/GdxSandbox/raw/master/description/model_scene.gif)
 
 # Resources:
 All project assets downloaded from free resources(but you can contact me in any copyright issues) or created by myself.
