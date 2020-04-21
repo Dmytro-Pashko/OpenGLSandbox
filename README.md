@@ -38,7 +38,7 @@ but this does not affect the understanding of the basic OpenGL functionality and
 ![](https://github.com/Dmytro-Pashko/GdxSandbox/raw/master/description/box_scene.gif)
 
 3. The 3D test scene to test process of loading 3D objects with texture wrapping and custom matertials, 
-enviroment(light) simulation and  custom camera input controller(movement - WASD + mouse 1, rotation - mouse 2, zoom - mouse 3).([link](https://github.com/Dmytro-Pashko/GdxSandbox/blob/feature/gltest/core/src/com/dpashko/sandbox/scene/model3d/Model3dScene.kt))
+enviroment(light) simulation and custom input controller for perspective camera(movement - WASD + mouse 1, rotation - mouse 2, zoom - mouse 3).([link](https://github.com/Dmytro-Pashko/GdxSandbox/blob/feature/gltest/core/src/com/dpashko/sandbox/scene/model3d/Model3dScene.kt))
 ![](https://github.com/Dmytro-Pashko/GdxSandbox/raw/master/description/model_scene.gif)
 
 # Resources:
