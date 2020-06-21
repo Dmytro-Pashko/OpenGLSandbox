@@ -10,6 +10,7 @@ import com.dpashko.sandbox.scene.Scene
 import com.dpashko.sandbox.scene.debug.DebugRender
 import com.dpashko.sandbox.scene.model3d.Model3dCameraController
 import com.dpashko.sandbox.shader.AxisShader
+import com.dpashko.sandbox.shader.GridShader
 import javax.inject.Inject
 
 open class Axis3dScene @Inject protected constructor(
@@ -19,6 +20,7 @@ open class Axis3dScene @Inject protected constructor(
     private val camera = PerspectiveCamera(67f, Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
     private var inputController = Model3dCameraController(camera)
     private var axisShader = AxisShader(camera)
+    private var gridShader = GridShader(camera)
 
     override fun init() {
         Gdx.input.inputProcessor = inputController
@@ -36,6 +38,7 @@ open class Axis3dScene @Inject protected constructor(
         Gdx.gl.glEnable(GL20.GL_DEPTH_TEST)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT or GL20.GL_DEPTH_BUFFER_BIT)
         inputController.update()
+        gridShader.draw()
         axisShader.draw()
         debugRender.render(camera)
     }

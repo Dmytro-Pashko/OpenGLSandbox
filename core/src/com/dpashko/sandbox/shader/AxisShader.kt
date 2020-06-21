@@ -9,7 +9,7 @@ import com.badlogic.gdx.utils.Disposable
 
 class AxisShader(private val camera: Camera,
                  private val axisLength: Float = 64.0f,
-                 private val axisWidth: Float = 2f) : Disposable {
+                 private val axisWidth: Float = 4f) : Disposable {
 
     private var vertices = createVertices()
     private val shader = ShaderProvider.axis3dShader()
