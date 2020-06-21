@@ -1,9 +1,9 @@
 
  attribute vec3 a_position;
- attribute vec3 a_normal;
  attribute vec2 a_texCoord0;
 
  uniform mat4 u_worldTrans;
+
  varying vec2 v_texCoord0;
  varying vec3 v_cubeMapUV;
 

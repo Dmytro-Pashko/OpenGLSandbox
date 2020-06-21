@@ -9,8 +9,7 @@ import com.badlogic.gdx.graphics.glutils.VertexBufferObjectWithVAO
 import com.badlogic.gdx.utils.Disposable
 import java.util.*
 
-class GridShader(private val camera: Camera,
-                 private val gridSize: Int = 64,
+class GridShader(private val gridSize: Int = 64,
                  private val gridLineWidth: Float = 1f,
                  lineColor: Color = Color.GRAY) : Disposable {
 
@@ -34,7 +33,7 @@ class GridShader(private val camera: Camera,
                 setVertices(vertices.toFloatArray(), 0, vertices.size)
             }
 
-    fun draw() {
+    fun draw(camera: Camera) {
         shader.begin()
         shader.setUniformMatrix("cameraCombinedMatrix", camera.combined)
         shader.setUniform4fv("gridColor", colorVector, 0, colorVector.size)
