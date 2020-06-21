@@ -12,8 +12,14 @@ public class ShaderProvider {
     }
 
     public static ShaderProgram axis3dShader() {
-        final String vertexShader = FilesProvider.test_axis3d_vertex_shader.readString();
-        final String fragmentShader = FilesProvider.test_axis3d_fragment_shader.readString();
+        final String vertexShader = FilesProvider.axis3d_vertex_shader.readString();
+        final String fragmentShader = FilesProvider.axis3d_fragment_shader.readString();
+        return new ShaderProgram(vertexShader, fragmentShader);
+    }
+
+    public static ShaderProgram grid3dShader() {
+        final String vertexShader = FilesProvider.grid3d_vertex_shader.readString();
+        final String fragmentShader = FilesProvider.grid3d_fragment_shader.readString();
         return new ShaderProgram(vertexShader, fragmentShader);
     }
 }

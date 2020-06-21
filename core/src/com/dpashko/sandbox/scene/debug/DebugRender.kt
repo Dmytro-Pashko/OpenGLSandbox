@@ -9,7 +9,7 @@ import com.badlogic.gdx.utils.Disposable
 import com.dpashko.sandbox.font.FontsProvider
 import javax.inject.Inject
 
-class DebugRender @Inject protected constructor() : Disposable {
+class DebugRender @Inject constructor() : Disposable {
 
     companion object {
         const val fpsText = "FPS: %d"

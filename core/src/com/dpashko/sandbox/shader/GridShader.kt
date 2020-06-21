@@ -11,26 +11,25 @@ import java.util.*
 
 class GridShader(private val camera: Camera,
                  private val gridSize: Int = 64,
-                 private val gridLineWidth: Float = 1f) : Disposable {
+                 private val gridLineWidth: Float = 1f,
+                 lineColor: Color = Color.GRAY) : Disposable {
 
-    private val color: Color = Color.GRAY
-    private var vertices = createVertices()
-    private val shader = ShaderProvider.axis3dShader()
+    private val colorVector = floatArrayOf(lineColor.r, lineColor.g, lineColor.b, 0f)
+    private val shader = ShaderProvider.grid3dShader()
+    private val vertices = createVertices()
 
     private fun createVertices() =
-            VertexBufferObjectWithVAO(true, 4 * (gridSize + 1), VertexAttribute.Position(), VertexAttribute.ColorUnpacked()).apply {
-
-                var vertices = LinkedList<Float>()
-                //Fill Y grid lines.
+            VertexBufferObjectWithVAO(true, 4 * (gridSize + 1), VertexAttribute.Position()).apply {
+                val vertices = LinkedList<Float>()
                 for (line in -gridSize / 2..gridSize / 2) {
                     //Y lines.
                     vertices.addAll(arrayOf(
-                            line.toFloat(), -gridSize / 2f, 0f, color.r, color.g, color.b, 0f,
-                            line.toFloat(), gridSize / 2f, 0f, color.r, color.g, color.b, 0f))
+                            line.toFloat(), -gridSize / 2f, 0f,
+                            line.toFloat(), gridSize / 2f, 0f))
                     //X lines.
                     vertices.addAll(arrayOf(
-                            -gridSize / 2f, line.toFloat(), 0f, color.r, color.g, color.b, 0f,
-                            gridSize / 2f, line.toFloat(), 0f, color.r, color.g, color.b, 0f))
+                            -gridSize / 2f, line.toFloat(), 0f,
+                            gridSize / 2f, line.toFloat(), 0f))
                 }
                 setVertices(vertices.toFloatArray(), 0, vertices.size)
             }
@@ -38,6 +37,7 @@ class GridShader(private val camera: Camera,
     fun draw() {
         shader.begin()
         shader.setUniformMatrix("cameraCombinedMatrix", camera.combined)
+        shader.setUniform4fv("gridColor", colorVector, 0, colorVector.size)
         vertices.bind(shader)
         Gdx.gl.glLineWidth(gridLineWidth)
         Gdx.gl.glDrawArrays(GL20.GL_LINES, 0, vertices.numVertices)
