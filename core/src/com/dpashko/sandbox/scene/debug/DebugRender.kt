@@ -4,17 +4,12 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Camera
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import com.badlogic.gdx.graphics.g3d.ModelBatch
-import com.badlogic.gdx.graphics.g3d.ModelInstance
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.utils.Disposable
 import com.dpashko.sandbox.font.FontsProvider
-import com.dpashko.sandbox.model.ModelsProvider
 import javax.inject.Inject
 
 class DebugRender @Inject protected constructor() : Disposable {
-
-    private val debugObjects = mutableListOf<ModelInstance>()
 
     companion object {
         const val fpsText = "FPS: %d"
@@ -34,7 +29,6 @@ class DebugRender @Inject protected constructor() : Disposable {
         }
 
         private val spriteBatch = SpriteBatch()
-        private val modelBatch = ModelBatch()
         private val fps: Int
             get() {
                 return Gdx.graphics.framesPerSecond
@@ -45,21 +39,7 @@ class DebugRender @Inject protected constructor() : Disposable {
             }
     }
 
-    fun init() {
-        debugObjects.addAll(initAxises())
-    }
-
-    private fun initAxises() = listOf(
-            ModelsProvider.createXAxisModel(64f),
-            ModelsProvider.createYAxisModel(64f),
-            ModelsProvider.createZAxisModel(64f))
-
     fun render(camera: Camera) {
-        modelBatch.begin(camera)
-        for (debugObject in debugObjects) {
-            modelBatch.render(debugObject)
-        }
-        modelBatch.end()
         render()
         drawCameraPos(camera)
     }
@@ -82,6 +62,5 @@ class DebugRender @Inject protected constructor() : Disposable {
 
     override fun dispose() {
         spriteBatch.dispose()
-        modelBatch.dispose()
     }
 }

@@ -10,4 +10,10 @@ public class ShaderProvider {
         final String fragmentShader = FilesProvider.skybox_fragment_shader.readString();
         return new ShaderProgram(vertexShader, fragmentShader);
     }
+
+    public static ShaderProgram axis3dShader() {
+        final String vertexShader = FilesProvider.test_axis3d_vertex_shader.readString();
+        final String fragmentShader = FilesProvider.test_axis3d_fragment_shader.readString();
+        return new ShaderProgram(vertexShader, fragmentShader);
+    }
 }

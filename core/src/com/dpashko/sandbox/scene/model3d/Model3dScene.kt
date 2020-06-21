@@ -35,7 +35,6 @@ open class Model3dScene @Inject protected constructor(
     }
 
     override fun init() {
-        debugRender.init()
         Gdx.input.inputProcessor = inputController
         camera.apply {
             near = 1f
