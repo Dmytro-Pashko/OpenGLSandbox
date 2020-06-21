@@ -25,7 +25,7 @@ class Sandbox : ApplicationAdapter() {
     }
 
     override fun render() {
-        activeScene?.render()
+        activeScene?.draw()
     }
 
     override fun dispose() {

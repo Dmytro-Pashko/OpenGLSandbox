@@ -4,7 +4,7 @@ interface Scene {
 
     fun init()
 
-    fun render()
+    fun draw()
 
     fun dispose()
 }

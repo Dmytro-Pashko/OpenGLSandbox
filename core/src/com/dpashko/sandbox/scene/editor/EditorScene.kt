@@ -1,52 +1,70 @@
 package com.dpashko.sandbox.scene.editor
 
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.graphics.GL30
-import com.badlogic.gdx.graphics.PerspectiveCamera
-import com.badlogic.gdx.math.Vector3
+import com.badlogic.gdx.scenes.scene2d.Actor
+import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.scenes.scene2d.ui.*
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
+import com.badlogic.gdx.utils.Align
+import com.badlogic.gdx.utils.Array
 import com.dpashko.sandbox.scene.Scene
-import com.dpashko.sandbox.shader.AxisShader
-import com.dpashko.sandbox.shader.GridShader
-import javax.inject.Inject
 
-open class EditorScene @Inject protected constructor() : Scene {
+class EditorScene(skin: Skin) : Scene, ChangeListener() {
 
-    private val state: EditorSceneState = EditorSceneState()
-    private val camera = PerspectiveCamera(67f, Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
-    private var inputController = EditorCameraController(camera)
-    private var axisShader = AxisShader(axisLength = state.worldSize)
-    private var gridShader = GridShader(gridSize = state.worldSize.toInt())
-    private val view = EditorSceneView()
+    private var stage = Stage()
+    private var table = Table(skin)
+    private var worldSizeSelectBox = SelectBox<WorldSize>(skin)
+    private var worldSizeLabel = Label("World size: ", skin)
+    private var drawGridCheckBox = CheckBox("Draw grid", skin)
+    private var drawAxisCheckBox = CheckBox("Draw axis", skin)
+    private val controller = EditorSceneController()
 
     override fun init() {
-        Gdx.input.inputProcessor = inputController
-        camera.apply {
-            near = 1f
-            far = 300f
-            position.set(Vector3(-1f, -2f, 5f))
-            rotate(Vector3.X, 45f)
-            rotate(Vector3.Z, -15f)
-            update()
+        stage.apply {
+            addActor(initUI(controller.state))
+            Gdx.input.inputProcessor = this
         }
-        view.init()
+        controller.init()
     }
 
-    override fun render() {
-        Gdx.gl.glEnable(GL30.GL_DEPTH_TEST)
-        Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT or GL30.GL_DEPTH_BUFFER_BIT)
-        inputController.update()
-        if (state.isDrawAxis) {
-            axisShader.draw(camera)
-        }
-        if (state.isDrawGrid) {
-            gridShader.draw(camera)
-        }
-        view.draw()
+    private fun initUI(state: EditorSceneState) =
+            table.apply {
+                add(Table().apply {
+                    right()
+                    add(worldSizeLabel)
+                    add(worldSizeSelectBox.apply {
+                        items = Array(WorldSize.values())
+                        selected = state.worldSize
+                        addListener(this@EditorScene)
+                    }).padLeft(10f)
+                    add(drawGridCheckBox.apply {
+                        isChecked = state.isDrawGrid
+                        addListener(this@EditorScene)
+                    }).padLeft(10f)
+                    add(drawAxisCheckBox.apply {
+                        isChecked = state.isDrawAxis
+                        addListener(this@EditorScene)
+                    }).padLeft(10f).padRight(10f)
+                }).fillX().align(Align.top).expand()
+                setFillParent(true)
+            }
+
+    override fun draw() {
+        controller.draw()
+        stage.act(Gdx.graphics.deltaTime)
+        stage.draw()
     }
 
     override fun dispose() {
-        axisShader.dispose()
-        gridShader.dispose()
-        view.dispose()
+        controller.dispose()
+        stage.dispose()
+    }
+
+    override fun changed(event: ChangeEvent, actor: Actor) {
+        when (actor) {
+            worldSizeSelectBox -> controller.onWorldSizeChanged(worldSizeSelectBox.selected)
+            drawAxisCheckBox -> controller.onDrawAxisChanged(drawAxisCheckBox.isChecked)
+            drawGridCheckBox -> controller.onDrawGridChanged(drawGridCheckBox.isChecked)
+        }
     }
 }
