@@ -3,7 +3,7 @@ package com.dpashko.sandbox.files;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 
-public class FilesProvider {
+public class FileProvider {
 
     //Textures
     public static FileHandle skyBox = Gdx.files.internal("textures/skybox_clouds.jpg");

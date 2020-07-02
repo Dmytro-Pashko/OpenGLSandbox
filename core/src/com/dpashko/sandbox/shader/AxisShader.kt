@@ -35,6 +35,7 @@ class AxisShader(private val axisLength: Float = 64.0f,
         Gdx.gl.glLineWidth(axisWidth)
         Gdx.gl.glDrawArrays(GL20.GL_LINES, 0, vertices.numVertices)
         vertices.unbind(shader)
+        Gdx.gl.glLineWidth(1f)
         shader.end()
     }
 

@@ -19,6 +19,7 @@ class EditorScene(skin: Skin) : Scene, ChangeListener() {
     private var fpsValue = Label("", skin)
     private var drawGridCheckBox = CheckBox("Draw grid", skin)
     private var drawAxisCheckBox = CheckBox("Draw axis", skin)
+    private var wireFrameModeCheckBox = CheckBox("Wireframe Mode", skin)
     private val controller = EditorSceneController()
 
     override fun init() {
@@ -41,6 +42,10 @@ class EditorScene(skin: Skin) : Scene, ChangeListener() {
                     }).padLeft(10f)
                     add(drawGridCheckBox.apply {
                         isChecked = state.isDrawGrid
+                        addListener(this@EditorScene)
+                    }).padLeft(10f)
+                    add(wireFrameModeCheckBox.apply {
+                        isChecked = state.isWireframeMode
                         addListener(this@EditorScene)
                     }).padLeft(10f)
                     add(drawAxisCheckBox.apply {
@@ -74,6 +79,7 @@ class EditorScene(skin: Skin) : Scene, ChangeListener() {
             worldSizeSelectBox -> controller.onWorldSizeChanged(worldSizeSelectBox.selected)
             drawAxisCheckBox -> controller.onDrawAxisChanged(drawAxisCheckBox.isChecked)
             drawGridCheckBox -> controller.onDrawGridChanged(drawGridCheckBox.isChecked)
+            wireFrameModeCheckBox -> controller.onWireframeModeChanged(wireFrameModeCheckBox.isChecked)
         }
     }
 }
