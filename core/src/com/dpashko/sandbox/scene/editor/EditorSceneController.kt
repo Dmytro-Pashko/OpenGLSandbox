@@ -10,13 +10,12 @@ import com.dpashko.sandbox.shader.WireframeShader
 
 class EditorSceneController(val state: EditorSceneState = EditorSceneState()) {
 
-
     private var cameraController = EditorCameraController(state.camera)
     private var worldController = EditorWorldController(state)
     private var modelBatch = ModelBatch()
     private var wireframeShader = WireframeShader()
-    private var axisShader = AxisShader(axisLength = state.worldSize.size.toFloat())
-    private var gridShader = GridShader(gridSize = state.worldSize.size)
+    private var axisShader = AxisShader(axisLength = state.gridSize.size.toFloat())
+    private var gridShader = GridShader(gridSize = state.gridSize.size)
 
     fun init() {
         if (Gdx.input.inputProcessor == null) {
@@ -80,10 +79,10 @@ class EditorSceneController(val state: EditorSceneState = EditorSceneState()) {
         state.isDrawAxis = isDrawAxis
     }
 
-    fun onWorldSizeChanged(worldSize: WorldSize) {
-        state.worldSize = worldSize
-        gridShader = GridShader(worldSize.size)
-        axisShader = AxisShader(worldSize.size.toFloat())
+    fun onGridSizeChanged(gridSize: GridSize) {
+        state.gridSize = gridSize
+        gridShader = GridShader(gridSize.size)
+        axisShader = AxisShader(gridSize.size.toFloat())
     }
 
     fun dispose() {

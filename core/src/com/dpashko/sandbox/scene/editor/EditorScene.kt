@@ -13,8 +13,8 @@ class EditorScene(skin: Skin) : Scene, ChangeListener() {
 
     private var stage = Stage()
     private var table = Table(skin)
-    private var worldSizeSelectBox = SelectBox<WorldSize>(skin)
-    private var worldSizeLabel = Label("World size: ", skin)
+    private var gridSizeSelectBox = SelectBox<GridSize>(skin)
+    private var gridSizeLabel = Label("Grid size: ", skin)
     private var fpsLabel = Label("FPS : ", skin)
     private var fpsValue = Label("", skin)
     private var drawGridCheckBox = CheckBox("Draw grid", skin)
@@ -34,16 +34,17 @@ class EditorScene(skin: Skin) : Scene, ChangeListener() {
             table.apply {
                 add(Table().apply {
                     right()
-                    add(worldSizeLabel)
-                    add(worldSizeSelectBox.apply {
-                        items = Array(WorldSize.values())
-                        selected = state.worldSize
-                        addListener(this@EditorScene)
-                    }).padLeft(10f)
                     add(drawGridCheckBox.apply {
                         isChecked = state.isDrawGrid
                         addListener(this@EditorScene)
                     }).padLeft(10f)
+                    add(gridSizeLabel)
+                            .padLeft(10f)
+                    add(gridSizeSelectBox.apply {
+                        items = Array(GridSize.values())
+                        selected = state.gridSize
+                        addListener(this@EditorScene)
+                    })
                     add(wireFrameModeCheckBox.apply {
                         isChecked = state.isWireframeMode
                         addListener(this@EditorScene)
@@ -76,9 +77,12 @@ class EditorScene(skin: Skin) : Scene, ChangeListener() {
 
     override fun changed(event: ChangeEvent, actor: Actor) {
         when (actor) {
-            worldSizeSelectBox -> controller.onWorldSizeChanged(worldSizeSelectBox.selected)
+            gridSizeSelectBox -> controller.onGridSizeChanged(gridSizeSelectBox.selected)
             drawAxisCheckBox -> controller.onDrawAxisChanged(drawAxisCheckBox.isChecked)
-            drawGridCheckBox -> controller.onDrawGridChanged(drawGridCheckBox.isChecked)
+            drawGridCheckBox -> {
+                gridSizeSelectBox.isDisabled = !drawGridCheckBox.isChecked
+                controller.onDrawGridChanged(drawGridCheckBox.isChecked)
+            }
             wireFrameModeCheckBox -> controller.onWireframeModeChanged(wireFrameModeCheckBox.isChecked)
         }
     }

@@ -12,6 +12,7 @@ public class FileProvider {
     public static FileHandle cylinderModel = Gdx.files.internal("models/cylinder.obj");
     public static FileHandle sphereModel = Gdx.files.internal("models/sphere.obj");
     public static FileHandle boxModel = Gdx.files.internal("models/box.obj");
+    public static FileHandle suzanneModel = Gdx.files.internal("models/suzanne.obj");
 
     //Shaders
     public static FileHandle skybox_vertex_shader = Gdx.files.internal("shaders/skybox_vertex_shader.glsl");
