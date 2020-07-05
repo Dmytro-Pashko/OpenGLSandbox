@@ -11,6 +11,7 @@ The significant part of the OpenGL investigating is its own shaders and tools im
 In each sample, I'm trying to implement everything myself to better understand the rendering process and OpenGL API.
 
 In the beginning was the Word[John 1:1]
+
 I've started with the 3D world editor which can contain the basic functionality to effective and optimized 3D scene creation.
 
 The mainline of this repository is the editor branch([LINK](https://github.com/Dmytro-Pashko/GdxSandbox/tree/feature/editor)) that will contain the world editor with useful shaders, utilities, additional custom implementations of the pathfinding system, texture generation, noise generation, shaders and etc.
