@@ -10,32 +10,37 @@ import com.badlogic.gdx.graphics.g3d.ModelInstance
 import com.badlogic.gdx.graphics.g3d.environment.PointLight
 import com.badlogic.gdx.math.Vector3
 import com.dpashko.sandbox.files.FileProvider
-import com.dpashko.sandbox.material.MaterialProvider
 import com.dpashko.sandbox.model.ModelProvider
 import com.dpashko.sandbox.scene.Scene
+import com.dpashko.sandbox.scene.editor.EditorCameraController
 import javax.inject.Inject
 
 open class Model3dScene @Inject protected constructor() : Scene {
 
+    private val rotationSpeed = .1f
     private val camera = PerspectiveCamera(67f, Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
+    private val cameraController = EditorCameraController(camera)
     private val batch = ModelBatch()
-    private val model = ModelInstance(ModelProvider.loadModel(
-            FileProvider.suzanneModel, MaterialProvider.diffuse(Color.GOLD)))
+    private val model = ModelInstance(ModelProvider.loadModel(FileProvider.house, null))
 
     private val environment = Environment().apply {
-        add(PointLight().set(Color.WHITE, Vector3(8f, -8f, 8f), 100f))
+        add(PointLight().set(Color.WHITE, Vector3(25f, 25f, 40f), 2000f))
+        add(PointLight().set(Color.WHITE, Vector3(-25f, -25f, 40f), 2000f))
+        add(PointLight().set(Color.WHITE, Vector3(25f, -25f, 40f), 2000f))
+        add(PointLight().set(Color.WHITE, Vector3(-25f, 25f, 40f), 2000f))
     }
 
     override fun init() {
-        camera.position.set(0f, -5f, 2f)
-        camera.lookAt(Vector3.Zero)
+        Gdx.input.inputProcessor = cameraController
+        camera.position.set(0f, -15f, 4f)
+        camera.lookAt(Vector3(0f, 0f, 1f))
         camera.update()
     }
 
     override fun draw() {
         Gdx.gl.glEnable(GL20.GL_DEPTH_TEST)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT or GL20.GL_DEPTH_BUFFER_BIT)
-        camera.rotateAround(Vector3.Zero, Vector3.Z, 1f)
+        camera.rotateAround(Vector3.Zero, Vector3.Z, rotationSpeed)
         camera.update()
         batch.begin(camera)
         batch.render(model, environment)

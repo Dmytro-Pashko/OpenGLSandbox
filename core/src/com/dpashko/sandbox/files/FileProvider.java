@@ -17,6 +17,7 @@ public class FileProvider {
     public static FileHandle sphereModel = Gdx.files.internal("models/sphere.obj");
     public static FileHandle boxModel = Gdx.files.internal("models/box.obj");
     public static FileHandle suzanneModel = Gdx.files.internal("models/suzanne.obj");
+    public static FileHandle house = Gdx.files.internal("models/house/house.obj");
     public static FileHandle suzanneModelHighPoly = Gdx.files.internal("models/high_poly_suzanne.obj");
 
     //Shaders
