@@ -1,32 +1,32 @@
-# Overview:
-Hi, I am an Android developer who has developed a desire to learn the basics of computer graphics (specifically using [OpenGL](https://www.opengl.org/)). 
+# LibGDX Sandbox
 
-Starting from the first 3D engines (Id Tech 1, Quake Engine) and going to modern such as Unreal Engine 4, Unity, CryEngine, Source, they have pivotal basic technologies and concepts of computer graphics. Actually, understanding of technologies and how it works under the hood allow us to work with any type of engine and take control over all parts of rendering process.
+The 3D engine prototype based on LibGDX(OpenGL) ([Link](https://https://libgdx.badlogicgames.com)) and Kotlin ([Link](https://https://kotlinlang.org)).
 
-Actually, I want to share the obtained knowledge with everyone who also wants to work with 3D graphics or the OpenGL too. Moreover, this repository is useful to understand the LibGDX API.
+From the beginning, the main idea of this repository was analyzing the LibGDX functionality and performance, especially in the 3D graphic. 
 
-I've faced with the [LibGDX](https://libgdx.badlogicgames.com/) after searching a cross-platform tool for convenient working with computer graphics which provides simple API to interact with GPU. In fact, the most required things for me was the ability to create the cross-platform 3D application(Windows, Android, iOS) using OpenGL API.
+After some exploration, I realized that I need a deep knowledge of 3D graphic basics, mathematical techniques(vectors, matrices, quaternions, etc.) and OpenGL API in order to build effective 3D applications. 
 
-Briefly, the LibGDX is a Java cross-platform framework that released its first version in 2009. It comes with an OpenGL ES 2.0 and 3.0 wrapper interface, which is the one that lets us perform 3D development.
-Also, the LibGDX offers convenient classes to avoid a lot of boilerplate code,  the all LibGDX features described [here](https://libgdx.badlogicgames.com/features.html).
+And this repository created to obtain some experience in 3D graphics.
 
-In this repository, I'm using [Kotlin](https://kotlinlang.org/) since it allows us to reduce the amount of boilerplate code that we need to write in Java.
-# Research:
-Currently, I've made a few articles in order to describe the general things in graphic programming like vertex data creation, transformations, coordinate system, projection view, texturing, and shaders. These are essential things to build the powerful 3D applications.
+The significant part of the OpenGL investigating is its own shaders and tools implementations for interact with GPU and rendering pipeline.
+In each sample, I tried to implement everything myself to better understand the rendering process and OpenGL API.
 
-We will use some math (linear algebra, geometry, and trigonometry) along with the articles, we can't avoid it :). Don't worry, I will try to explain all the required concepts of math.
+The mainline of this repository is the editor branch([LINK](https://github.com/Dmytro-Pashko/GdxSandbox/tree/feature/editor)) that will contain the simple 3D world editor with useful shaders, utilities, additional custom implementations of the pathfinding system, texture generation, noise generation, shaders and etc.
 
-I can assume that you familiar with Java or Kotlin and have installed the LibGDX, Java Development Kit (JDK) 
-otherwise, a simple Google search will do it :)
+# The OpenGL API research:
+Currently, I've implemented few test examples in onder to analyze the general functions, such as vertex transformation and primitive rasterization,
+which are performed by 3D graphics hardware using the OpenGL library API.
 
-This research is divided into the following chapters:
-* [Part 1 - The OpenGL introduction and first scene](https://github.com/Dmytro-Pashko/OpenGLSandbox/blob/chapter_1/README.md).
-* [Part 2 - Matrices for computer graphic in details](https://github.com/Dmytro-Pashko/OpenGLSandbox/blob/chapter_2/README.md).
-
-In each chapter, I'm trying to implement everything on my own for a better understanding of all concepts, because doing things by yourself is really fun and exciting and gives you a great understanding of the process.
+These scenes based on direct communication with HAL(Hardware Abstraction Layer) provided by LWJGL [LINK](https://www.lwjgl.org/) for Java.
 
 **Note:**
-*To simplify some things I've used a LibGDX API. But, it doesn't affect the understanding of the basic OpenGL functionality and most of the rendering parts were implemented by myself.*
+*To simplify code I've used a LibGDX API. Understanding of the basic the OpenGL functionality and most of the rendering parts were implemented by self.*
+
+The following implemented scenes:
+//TBD
+
+# Resources:
+All project assets downloaded from free resources(but you can contact me in any copyright issues) or created by myself.
+
 # License:
-All code samples, gifs, and images are licensed under the terms of the CC BY-NC 4.0 license as published by Creative Commons, either version 4 of the License You can find a human-readable format of the license [here](https://creativecommons.org/licenses/by-nc/4.0/) and the full license [here](https://creativecommons.org/licenses/by-nc/4.0/legalcode).
-When attributing any of the licensed works, please include a copyright notice including a hyperlink to the copyrighted work and a link to the specific license.
+This project is licensed under the [Apache 2 License](http://www.apache.org/licenses/LICENSE-2.0.html), meaning you can use it free of charge, without strings attached in commercial and non-commercial projects.
