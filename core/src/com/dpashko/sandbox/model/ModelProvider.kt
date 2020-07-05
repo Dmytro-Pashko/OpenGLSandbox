@@ -31,7 +31,7 @@ object ModelProvider {
             scale: Float = 1f,
             material: Material = MaterialProvider.diffuse(Color.GRAY)) = loadModel(FileProvider.suzanneModel, material)
 
-    private fun loadModel(file: FileHandle?, material: Material?): ModelInstance {
+    public fun loadModel(file: FileHandle?, material: Material?): ModelInstance {
         val model = objLoader.loadModel(file, true)
         if (material != null) {
             model.materials.clear()

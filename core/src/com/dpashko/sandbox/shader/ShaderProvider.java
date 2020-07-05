@@ -22,4 +22,16 @@ public class ShaderProvider {
         final String fragmentShader = FileProvider.grid3d_fragment_shader.readString();
         return new ShaderProgram(vertexShader, fragmentShader);
     }
+
+    public static ShaderProgram simple3dShader() {
+        final String vertexShader = FileProvider.simple3d_vertex_shader.readString();
+        final String fragmentShader = FileProvider.simple3d_fragment_shader.readString();
+        return new ShaderProgram(vertexShader, fragmentShader);
+    }
+
+    public static ShaderProgram lightShader() {
+        final String vertexShader = FileProvider.light_3d_vertex_shader.readString();
+        final String fragmentShader = FileProvider.light_3d_fragment_shader.readString();
+        return new ShaderProgram(vertexShader, fragmentShader);
+    }
 }
