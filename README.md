@@ -53,8 +53,8 @@ VertexBufferObjectWithVAO(true, 4, VertexAttribute.Position(), VertexAttribute.T
 ```
 As result the array contains 4 vertices and each vertex combines from 5 float values.
 As you can see, the vertices data is a single array with specific Vertex Attributes that used to define the following vertex components:
-**VertexAttribute.Position()** - the position component(x,y,z);
-**VertexAttribute.TexCoords(0)** - the texture coordinates component(u,v).
+* **VertexAttribute.Position()** - the position component(x,y,z);
+* **VertexAttribute.TexCoords(0)** - the texture coordinates component(u,v).
 Coordinates component is a range from 0 to 1 in the x and y axis (remember that we use 2D texture images). Texture coordinates start at (0,0) for the lower-left corner of a texture image to (1,1) for the upper right corner of a texture image. 
 
 The OpenGL can works with different type of privitives: points, lines, triangles etc.
@@ -90,10 +90,11 @@ void main()
     texcoord = a_texCoord0;
 }
 ```
-**a_position** - the input value of the vertex coordinates(x,y,z).
-**a_texCoord0** - the input value of the texture coordinates(u,v).
-**texcoord** - the output value of texture coordinates, will be passed to the fragment shader in order to define pixel color.
-**combined** - a global shader variable for final perspective projection matrix ([More detailed informaiton](https://hackmd.io/lB66PzAkRZmJDKkCrk4x2g?both#World-transformation-and-Projection-view)).
+* **a_position** - the input value of the vertex coordinates(x,y,z).
+* **a_texCoord0** - the input value of the texture coordinates(u,v).
+* **texcoord** - the output value of texture coordinates, will be passed to the fragment shader in order to define pixel color.
+* **combined** - a global shader variable for final perspective projection matrix ([More detailed informaiton](https://hackmd.io/lB66PzAkRZmJDKkCrk4x2g?both#World-transformation-and-Projection-view)).
+
 To set the output of the vertex shader we have to assign the position data to the predefined **gl_Position** variable which is a vec4 behind the scenes. 
 gl_Position is a [Homogeneous coordinates](https://en.wikipedia.org/wiki/Homogeneous_coordinates). Homogeneous coordinates are needed for perspective projection.
 
@@ -117,9 +118,9 @@ void main()
 
 The texture2D function returns a texel, i.e. the (color) value of the texture for the given coordinates. The function has one input parameter of the type sampler2D and one input parameter of the type vec2 : sampler, the uniform the texture is bound to, and coord, the 2-dimensional coordinates of the texel to look up.
 
-The **texcoord** - the input value of the coordinates for texture mapping obtain from vertex shader.
-The **texture_1** - a global shader variable for single 2D texture.
-**gl_FragColor** - The output variable and that is a vector of size 4 that defines the final color output that we should calculate.
+* **texcoord** - the input value of the coordinates for texture mapping obtain from vertex shader;
+* **texture_1** - a global shader variable for single 2D texture;
+* **gl_FragColor** - The output variable and that is a vector of size 4 that defines the final color output that we should calculate.
 ### Shader program:
 A shader program encapsulates a vertex and fragment shader pair linked to form a shader program.
 The LibGDX provides the own implementation of the [ShaderProgram](https://libgdx.badlogicgames.com/ci/nightlies/docs/api/com/badlogic/gdx/graphics/glutils/ShaderProgram.html).
