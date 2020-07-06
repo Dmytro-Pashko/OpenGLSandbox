@@ -28,8 +28,13 @@ class Plane3dScene @Inject internal constructor() : Scene {
             .setToLookAt(Vector3(0f, 0f, 3f), Vector3.Zero, Vector3.Y)
 
     // Camera projection(frustum)
-    private val projectionMatrix = Matrix4()
-            .setToProjection(0.1f, 10f, 67f, (Gdx.graphics.width / Gdx.graphics.height).toFloat())
+    private val projectionMatrix = Matrix4().apply {
+        val near = 1f
+        val far = 5f
+        val fov = 67f
+        val aspectRation = (Gdx.graphics.width / Gdx.graphics.height).toFloat()
+        setToProjection(near, far, fov, aspectRation)
+    }
 
     // Combined projection matrix.
     private val combinedMatrix = Matrix4()
@@ -45,9 +50,10 @@ class Plane3dScene @Inject internal constructor() : Scene {
 
     override fun draw() {
         rotatePlane()
-        combinedMatrix.set(projectionMatrix).mul(viewMatrix).mul(modelMatrix)
-        Gdx.gl.glClear(GL_COLOR_BUFFER_BIT)
+        Gdx.gl.glEnable(GL_DEPTH_TEST)
+        Gdx.gl.glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT)
         shader.begin()
+        combinedMatrix.set(projectionMatrix).mul(viewMatrix).mul(modelMatrix)
         shader.setUniformMatrix("combined", combinedMatrix)
         plane.draw(shader)
         shader.end()
@@ -70,11 +76,9 @@ class Plane3dScene @Inject internal constructor() : Scene {
 
         fun draw(shader: ShaderProgram) {
             Gdx.gl.glBindTexture(GL_TEXTURE_2D, texture.textureObjectHandle)
-            shader.setUniformi("texture_1", 0)
             vertices.bind(shader)
             Gdx.gl.glDrawElements(GL_TRIANGLES, vertices.numVertices, GL_UNSIGNED_SHORT, indices.buffer)
             vertices.unbind(shader)
-            Gdx.gl.glBindTexture(GL_TEXTURE_2D, 0)
         }
 
         private fun createVertices() =
