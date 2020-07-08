@@ -51,7 +51,7 @@ VertexBufferObjectWithVAO(true, 4, VertexAttribute.Position(), VertexAttribute.T
         setVertices(vertices, 0, vertices.size)
     }
 ```
-As result the array contains 4 vertices and each vertex combines from 5 float values.
+As result the array contains 4 vertices and each vertex combines from 5 float values (x, y, z, u, v).
 As you can see, the vertices data is a single array with specific Vertex Attributes that used to define the following vertex components:
 * **VertexAttribute.Position()** - the position component(x,y,z);
 * **VertexAttribute.TexCoords(0)** - the texture coordinates component(u,v).
