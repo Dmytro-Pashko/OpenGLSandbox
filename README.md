@@ -57,7 +57,7 @@ Our vertex buffer data is formatted as follows:
 As you can see, the vertices data is a single array with specific Vertex Attributes that used to define the following vertex components:
 * **VertexAttribute.Position()** - the position component(x,y,z);
 * **VertexAttribute.TexCoords(0)** - the texture coordinates component(u,v).
-Coordinates component is a range from 0 to 1 in the x and y axis (remember that we use 2D texture images). Texture coordinates start at (0,0) for the lower-left corner of a texture image to (1,1) for the upper right corner of a texture image. 
+Coordinates component is a range from 0 to 1 in the x and y axis (remember that we use 2D texture images). Texture coordinates start at (0,0) for the lower-left corner of a texture image to (1,1) for the upper right corner of a texture image:
 
 ![](https://raw.githubusercontent.com/Dmytro-Pashko/GdxSandbox/feature/testing/description/uv_coordinates.png)
 
