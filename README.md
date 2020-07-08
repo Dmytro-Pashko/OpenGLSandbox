@@ -44,10 +44,10 @@ The following example creates VBO(Vertex buffer object) with VAO(Vertex Array Ob
 VertexBufferObjectWithVAO(true, 4, VertexAttribute.Position(), VertexAttribute.TexCoords(0)).apply {
     val vertices = floatArrayOf(
     // Position(x,y,z), Texture coordinates (u,v)
-        -1f, 1f, 0f, 0f, 1f,
-        -1f, -1f, 0f, 0f, 0f,
-        1f, -1f, 0f, 1f, 0f,
-        1f, 1f, 0f, 1f, 1f)
+        -1f,  1f, 0f, 0f, 1f, // ╔ upper left corner
+        -1f, -1f, 0f, 0f, 0f, // ╚ lower-left corner
+         1f, -1f, 0f, 1f, 0f, // ╝ right bottom corner
+         1f,  1f, 0f, 1f, 1f) // ╗ upper right corner
         setVertices(vertices, 0, vertices.size)
     }
 ```
