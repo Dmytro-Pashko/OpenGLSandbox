@@ -51,6 +51,8 @@ VertexBufferObjectWithVAO(true, 4, VertexAttribute.Position(), VertexAttribute.T
     }
 ```
 As result the array contains 4 vertices and each vertex combines from 5 float values (x, y, z, u, v).
+Our vertex buffer data is formatted as follows:
+![](https://raw.githubusercontent.com/Dmytro-Pashko/GdxSandbox/feature/testing/description/vertex%20data%20format.png)
 
 As you can see, the vertices data is a single array with specific Vertex Attributes that used to define the following vertex components:
 * **VertexAttribute.Position()** - the position component(x,y,z);
@@ -58,10 +60,6 @@ As you can see, the vertices data is a single array with specific Vertex Attribu
 Coordinates component is a range from 0 to 1 in the x and y axis (remember that we use 2D texture images). Texture coordinates start at (0,0) for the lower-left corner of a texture image to (1,1) for the upper right corner of a texture image. 
 
 ![](https://raw.githubusercontent.com/Dmytro-Pashko/GdxSandbox/feature/testing/description/uv_coordinates.png)
-
-Our vertex buffer data is formatted as follows:
-
-![](https://raw.githubusercontent.com/Dmytro-Pashko/GdxSandbox/feature/testing/description/vertex%20data%20format.png)
 
 The OpenGL can work with different types of primitives: points, lines, triangles, etc.
 The most suitable primitive to build our square plane is a triangle.
