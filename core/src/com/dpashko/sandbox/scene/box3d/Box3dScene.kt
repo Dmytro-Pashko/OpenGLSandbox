@@ -18,27 +18,11 @@ import kotlin.random.Random
 class Box3dScene @Inject internal constructor() : Scene {
 
     private lateinit var shader: ShaderProgram
-    private var boxes = mutableListOf<Box>().apply {
-        add(Box(Vector3(2.0f, 5.0f, -15.0f), Texture(Pixmap(FileProvider.box))))
-        add(Box(Vector3(-1.5f, -2.2f, -2.5f), Texture(Pixmap(FileProvider.box))))
-        add(Box(Vector3(-3.8f, -2.0f, -12.3f), Texture(Pixmap(FileProvider.box))))
-        add(Box(Vector3(2.4f, -0.4f, -3.5f), Texture(Pixmap(FileProvider.box))))
-        add(Box(Vector3(-1.7f, 3.0f, -7.5f), Texture(Pixmap(FileProvider.box))))
-        add(Box(Vector3(1.3f, -2.0f, -2.5f), Texture(Pixmap(FileProvider.box))))
-        add(Box(Vector3(1.5f, 2.0f, -2.5f), Texture(Pixmap(FileProvider.box))))
-        add(Box(Vector3(1.5f, 0.2f, -1.5f), Texture(Pixmap(FileProvider.box))))
-        add(Box(Vector3(-1.3f, 1.0f, -1.5f), Texture(Pixmap(FileProvider.box))))
-    }
-
-    // Camera position and rotation matrix
+    private val boxes = mutableListOf<Box>()
     private val viewMatrix = Matrix4()
-            .setToLookAt(Vector3(0f, 0f, 3f), Vector3.Zero, Vector3.Y)
-
-    // Camera projection(frustum)
+            .setToLookAt(Vector3(0f, -8f, 1f), Vector3.Zero, Vector3.Y)
     private val projectionMatrix = Matrix4()
             .setToProjection(0.1f, 64f, 67f, (Gdx.graphics.width / Gdx.graphics.height).toFloat())
-
-    // Combined projection matrix.
     private val combinedCameraMatrix = Matrix4()
 
     override fun init() {
@@ -47,12 +31,27 @@ class Box3dScene @Inject internal constructor() : Scene {
                 throw IllegalStateException("Shader is not compiled: $log")
             }
         }
+        createBoxes()
     }
 
+    private fun createBoxes() {
+        boxes.apply {
+            add(Box(Vector3(2f, 1f, -2f), getRandomDirection()))
+            add(Box(Vector3(-2f, 1f, -2f), getRandomDirection()))
+            add(Box(Vector3(0f, -2f, -2f), getRandomDirection()))
+            add(Box())
+            add(Box(Vector3(-2f, -1f, 2f), getRandomDirection()))
+            add(Box(Vector3(2f, -1f, 2f), getRandomDirection()))
+            add(Box(Vector3(0f, 2f, 2f), getRandomDirection()))
+        }
+    }
+
+    private fun getRandomDirection() = Vector3(Random.nextFloat(), Random.nextFloat(), Random.nextFloat())
+
     override fun draw() {
-        rotateBoxes()
         Gdx.gl.glEnable(GL_DEPTH_TEST)
         Gdx.gl.glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT)
+        updateRotations()
         shader.begin()
         combinedCameraMatrix.set(projectionMatrix).mul(viewMatrix)
         for (box in boxes) {
@@ -61,18 +60,10 @@ class Box3dScene @Inject internal constructor() : Scene {
         shader.end()
     }
 
-    private val rotations = initRotations()
-    private fun rotateBoxes() {
-        for (i in 0 until boxes.size) {
-            val angle = Gdx.graphics.deltaTime * rotations[i].first
-            boxes[i].rotate(rotations[i].second, angle)
-        }
-    }
-
-    //Each box has own rotation direction and rotation speed.
-    private fun initRotations() = mutableListOf<Pair<Float, Vector3>>().apply {
+    private fun updateRotations() {
+        viewMatrix.rotate(Vector3.Z, 0.25f)
         for (box in boxes) {
-            add(Random.nextInt(20, 99).toFloat() to Vector3(Random.nextFloat(), Random.nextFloat(), Random.nextFloat()))
+            box.rotate()
         }
     }
 
@@ -83,28 +74,29 @@ class Box3dScene @Inject internal constructor() : Scene {
         shader.dispose()
     }
 
-    data class Box(val pos: Vector3 = Vector3.Zero, val texture: Texture) {
-
-        private var vertices = createVertices()
-        private var transformation = Matrix4().translate(pos)
+    data class Box(val pos: Vector3 = Vector3.Zero,
+                   val rotationDirection: Vector3 = Vector3.Zero,
+                   val texture: Texture = Texture(Pixmap(FileProvider.box))) {
+        private val vertices = createVertexData()
+        private val viewMatrix = Matrix4().translate(pos)
+        private val rotationSpeed = .2f
         private var tmp = Matrix4()
+
+        fun rotate() {
+            viewMatrix.rotate(rotationDirection, rotationSpeed)
+        }
 
         fun draw(shader: ShaderProgram, combinedCameraMatrix: Matrix4) {
             Gdx.gl.glBindTexture(GL_TEXTURE_2D, texture.textureObjectHandle)
-            shader.setUniformMatrix("combined", tmp.set(combinedCameraMatrix).mul(transformation))
-            shader.setUniformi("texture_1", 0)
+            shader.setUniformMatrix("combined", tmp.set(combinedCameraMatrix).mul(viewMatrix))
             vertices.bind(shader)
             Gdx.gl.glDrawArrays(GL_TRIANGLES, 0, vertices.numVertices)
             vertices.unbind(shader)
-            Gdx.gl.glBindTexture(GL_TEXTURE_2D, 0)
         }
 
-        fun rotate(axis: Vector3, degree: Float): Matrix4 = transformation.rotate(axis, degree)
-
-        private fun createVertices() =
+        private fun createVertexData() =
                 VertexBufferObjectWithVAO(true, 36, VertexAttribute.Position(), VertexAttribute.TexCoords(0)).apply {
                     val vertices = floatArrayOf(
-                            // Position(x,y,z), Texture coordinates (u,v)
                             -0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
                             0.5f, -0.5f, -0.5f, 1.0f, 0.0f,
                             0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
