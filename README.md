@@ -74,6 +74,8 @@ private fun createIndices() = IndexArray(6).apply {
 All triangle indices should be defined in counter-clockwise winding order to 
 provide the correct operation of the OpenGL Face culling ([LINK](https://www.khronos.org/opengl/wiki/Face_Culling)).
 
+![](https://raw.githubusercontent.com/Dmytro-Pashko/GdxSandbox/feature/testing/description/winding-order-triangle.png)
+
 More detailed about vertex data creation you can read at [learnopengl.com](https://learnopengl.com/Getting-started/Hello-Triangle)
 ## Shaders
 The shader is a program that runs for each specific section of the graphics pipeline. In a basic sense, the shader is a program transforming inputs to outputs. The shader is a very isolated program and can communicate with other shaders via inputs and outputs. Shaders are written in the C-like language GLSL [Wiki](https://en.wikipedia.org/wiki/OpenGL_Shading_Language). GLSL is tailored for use with graphics and contains useful features specifically targeted at vector and matrix manipulation.
