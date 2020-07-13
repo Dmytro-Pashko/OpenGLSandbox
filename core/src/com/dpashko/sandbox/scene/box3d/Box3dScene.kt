@@ -64,11 +64,11 @@ class Box3dScene @Inject internal constructor() : Scene {
     data class Box(val position: Vector3, val size: Float = 1f, val texture: Texture) {
         private val vertices = createVertexData()
         private val indices = createIndices()
-        private val viewMatrix = Matrix4().translate(position).scale(size, size, size)
+        private val modelMatrix = Matrix4().translate(position).scale(size, size, size)
         private var tmp = Matrix4()
 
         fun draw(shader: ShaderProgram, combinedCameraMatrix: Matrix4) {
-            shader.setUniformMatrix("combined", tmp.set(combinedCameraMatrix).mul(viewMatrix))
+            shader.setUniformMatrix("combined", tmp.set(combinedCameraMatrix).mul(modelMatrix))
             Gdx.gl.glBindTexture(GL_TEXTURE_2D, texture.textureObjectHandle)
             vertices.bind(shader)
             Gdx.gl.glDrawElements(GL_TRIANGLES, indices.numIndices, GL_UNSIGNED_SHORT, indices.buffer)
@@ -76,7 +76,7 @@ class Box3dScene @Inject internal constructor() : Scene {
         }
 
         fun rotate(axis: Vector3, degree: Float) {
-            viewMatrix.rotate(axis, degree)
+            modelMatrix.rotate(axis, degree)
         }
 
         private fun createIndices(): IndexData {
