@@ -9,7 +9,15 @@ public class FileProvider {
 
     //Textures
     public static FileHandle skyBox = Gdx.files.internal("textures/skybox_clouds.jpg");
-    public static FileHandle box = Gdx.files.internal("textures/box.jpg");
+    //Boxes
+    public static FileHandle box1 = Gdx.files.internal("textures/box1.jpg");
+    public static FileHandle box2 = Gdx.files.internal("textures/box2.jpg");
+    public static FileHandle box3 = Gdx.files.internal("textures/box3.jpg");
+    public static FileHandle box4 = Gdx.files.internal("textures/box4.jpg");
+    public static FileHandle box5 = Gdx.files.internal("textures/box5.jpg");
+    public static FileHandle box6 = Gdx.files.internal("textures/box6.jpg");
+    public static FileHandle box7 = Gdx.files.internal("textures/box7.jpg");
+
     public static FileHandle sky = Gdx.files.internal("textures/sky.png");
 
     //Models

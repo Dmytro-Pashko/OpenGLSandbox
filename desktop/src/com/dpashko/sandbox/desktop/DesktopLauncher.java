@@ -9,6 +9,7 @@ public class DesktopLauncher {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
         config.setTitle("Sandbox");
         config.setWindowedMode(1024,768);
+        config.setResizable(false);
         config.useOpenGL3(true, 3, 2);
         new Lwjgl3Application(new Sandbox(), config);
     }
