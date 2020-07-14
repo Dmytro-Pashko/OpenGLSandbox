@@ -15,9 +15,24 @@ import kotlin.random.Random
 
 class Box3dScene @Inject internal constructor() : Scene {
 
-    private val viewMatrix = Matrix4().setToLookAt(Vector3(0f, -8f, 1f), Vector3.Zero, Vector3.Y)
-    private val projectionMatrix = Matrix4().setToProjection(0.1f, 64f, 67f, 1.33f)
-    private val combinedCameraMatrix = Matrix4()
+    private val viewMatrix = Matrix4().apply {
+        val position = Vector3(0f, -8f, 0f)
+        val target = Vector3(0f, 0f, 0f)
+        val direction = Vector3(position).sub(target).nor()
+        val right = Vector3.X
+        val up = Vector3(direction).crs(right).nor()
+        setToLookAt(position, target, up)
+    }
+    private val projectionMatrix = Matrix4().apply {
+        val near = 0.1f
+        val far = 32f
+        val fov = 67f
+        val aspectRatio = Gdx.graphics.width / Gdx.graphics.height
+        setToProjection(near, far, fov, aspectRatio.toFloat())
+    }
+    private val combinedCameraMatrix = Matrix4().apply {
+        set(projectionMatrix).mul(viewMatrix)
+    }
     private lateinit var shader: ShaderProgram
     private lateinit var boxes: Map<Box, Vector3>
 
@@ -43,10 +58,9 @@ class Box3dScene @Inject internal constructor() : Scene {
     override fun draw() {
         Gdx.gl.glEnable(GL_DEPTH_TEST)
         Gdx.gl.glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT)
-        // Rotate camera around Z axis by 0.25 degree.
         viewMatrix.rotate(Vector3.Z, 0.25f)
-        shader.begin()
         combinedCameraMatrix.set(projectionMatrix).mul(viewMatrix)
+        shader.begin()
         for ((box, rotationAxis) in boxes) {
             box.rotate(rotationAxis, 0.25f)
             box.draw(shader, combinedCameraMatrix)
