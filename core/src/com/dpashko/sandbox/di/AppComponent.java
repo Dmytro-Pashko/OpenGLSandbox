@@ -1,6 +1,6 @@
 package com.dpashko.sandbox.di;
 
-import com.dpashko.sandbox.scene.box3d.Box3dScene;
+import com.dpashko.sandbox.scene.cube3d.Cubes3dScene;
 import com.dpashko.sandbox.scene.editor.EditorScene;
 import com.dpashko.sandbox.scene.light3d.Light3dScene;
 import com.dpashko.sandbox.scene.model3d.Model3dScene;
@@ -17,7 +17,7 @@ public interface AppComponent {
 
     Plane3dScene getPlane3dScene();
 
-    Box3dScene getBox3dScene();
+    Cubes3dScene getCube3dScene();
 
     Light3dScene getLight3dScene();
 

@@ -1,4 +1,4 @@
-package com.dpashko.sandbox.scene.box3d
+package com.dpashko.sandbox.scene.cube3d
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.GL20.*
@@ -13,7 +13,7 @@ import com.dpashko.sandbox.shader.ShaderProvider
 import javax.inject.Inject
 import kotlin.random.Random
 
-class Box3dScene @Inject internal constructor() : Scene {
+class Cubes3dScene @Inject internal constructor() : Scene {
 
     private val viewMatrix = Matrix4().apply {
         val position = Vector3(0f, -8f, 0f)
@@ -34,7 +34,7 @@ class Box3dScene @Inject internal constructor() : Scene {
         set(projectionMatrix).mul(viewMatrix)
     }
     private lateinit var shader: ShaderProgram
-    private lateinit var boxes: Map<Box, Vector3>
+    private lateinit var cubes: Map<Cube, Vector3>
 
     override fun init() {
         shader = ShaderProvider.simple3dShader().apply {
@@ -42,14 +42,14 @@ class Box3dScene @Inject internal constructor() : Scene {
                 throw IllegalStateException("Shader is not compiled: $log")
             }
         }
-        boxes = mapOf(
-                Box(position = Vector3(2f, 1f, -2f), texture = Texture(FileProvider.box1)) to getRandomDirection(),
-                Box(position = Vector3(-2f, 1f, -2f), texture = Texture(FileProvider.box2)) to getRandomDirection(),
-                Box(position = Vector3(0f, -2f, -2f), texture = Texture(FileProvider.box3)) to getRandomDirection(),
-                Box(position = Vector3.Zero, texture = Texture(FileProvider.box4), size = 2f) to Vector3.Zero,
-                Box(position = Vector3(-2f, -1f, 2f), texture = Texture(FileProvider.box5)) to getRandomDirection(),
-                Box(position = Vector3(2f, -1f, 2f), texture = Texture(FileProvider.box6)) to getRandomDirection(),
-                Box(position = Vector3(0f, 2f, 2f), texture = Texture(FileProvider.box7)) to getRandomDirection()
+        cubes = mapOf(
+                Cube(position = Vector3(2f, 1f, -2f), texture = Texture(FileProvider.cube1)) to getRandomDirection(),
+                Cube(position = Vector3(-2f, 1f, -2f), texture = Texture(FileProvider.cube2)) to getRandomDirection(),
+                Cube(position = Vector3(0f, -2f, -2f), texture = Texture(FileProvider.cube3)) to getRandomDirection(),
+                Cube(position = Vector3.Zero, texture = Texture(FileProvider.cube4), size = 2f) to Vector3.Zero,
+                Cube(position = Vector3(-2f, -1f, 2f), texture = Texture(FileProvider.cube5)) to getRandomDirection(),
+                Cube(position = Vector3(2f, -1f, 2f), texture = Texture(FileProvider.cube6)) to getRandomDirection(),
+                Cube(position = Vector3(0f, 2f, 2f), texture = Texture(FileProvider.cube7)) to getRandomDirection()
         )
     }
 
@@ -61,21 +61,21 @@ class Box3dScene @Inject internal constructor() : Scene {
         viewMatrix.rotate(Vector3.Z, 0.25f)
         combinedCameraMatrix.set(projectionMatrix).mul(viewMatrix)
         shader.begin()
-        for ((box, rotationAxis) in boxes) {
-            box.rotate(rotationAxis, 0.25f)
-            box.draw(shader, combinedCameraMatrix)
+        for ((cube, rotationAxis) in cubes) {
+            cube.rotate(rotationAxis, 0.25f)
+            cube.draw(shader, combinedCameraMatrix)
         }
         shader.end()
     }
 
     override fun dispose() {
-        for (box in boxes.keys) {
-            box.dispose()
+        for (cube in cubes.keys) {
+            cube.dispose()
         }
         shader.dispose()
     }
 
-    data class Box(val position: Vector3, val size: Float = 1f, val texture: Texture) {
+    data class Cube(val position: Vector3, val size: Float = 1f, val texture: Texture) {
         private val vertices = createVertexData()
         private val indices = createIndices()
         private val modelMatrix = Matrix4().translate(position).scale(size, size, size)
