@@ -1,15 +1,13 @@
 # LibGDX Sandbox
 
-The 3D engine prototype based on LibGDX(OpenGL) ([Link](https://https://libgdx.badlogicgames.com)) and Java+Kotlin ([Link](https://https://kotlinlang.org)).
-
 From the beginning, the main idea of this repository was an analysis of the LibGDX functionality and performance, especially in the 3D graphic.
 
-After some exploration, I realized that I need a deep knowledge of 3D graphic basics, mathematical techniques(vectors, matrices, quaternions, etc.) and experience with the OpenGL API in order to build effective 3D applications. 
+After some exploration, I realized that I need a deep knowledge of 3D graphic basics, mathematical techniques (vectors, matrices, quaternions, etc.) and experience with the OpenGL API in order to build effective 3D applications. 
 After all, this repository created to obtain some experience in 3D graphics.
 
 I've started with the editor for a 3D scenes which can contain the basic functionality to effective and optimized 3D scene creation.
 
-The mainline of this repository is the editor branch([LINK](https://github.com/Dmytro-Pashko/GdxSandbox/tree/feature/editor)) that will contain the world editor with useful GLLS shaders, utilities, additional custom implementations of the pathfinding system, texture generation, noise generation, shaders and etc.
+The mainline of this repository is the editor branch([LINK](https://github.com/Dmytro-Pashko/GdxSandbox/tree/feature/editor)) that will contain the world editor with useful GLSL shaders, utilities, additional custom implementations of the pathfinding system, texture generation, noise generation, shaders and etc.
 # The OpenGL API research:
 The significant part of the OpenGL analyzing is its own GLSL shaders implementation in order to interact with the OpenGL rendering process.
 In each sample, I'm trying to implement everything myself to better understand the  OpenGL functionality.
@@ -82,7 +80,9 @@ The shader is a program that runs for each specific section of the graphics pipe
 ### Vertex Shader:
 The Vertex Shader ([LINK](https://www.khronos.org/opengl/wiki/Vertex_Shader)) is the programmable Shader stage in the rendering pipeline that handles the processing of individual vertices.
 
-The basic vertext shader:
+I've implemented the simplest vertex shader we can find: the only thing it should to do is to calculate the position of the vertex considering the combined(view*projection*model) matrix and send the input vertices to the fragment shader without transformation. So, it’s a useless shader and doesn't provide any transformations. But it’s perfect to see the principle of its working.
+
+The the following code snipper of vertex shader:
 ```
 #version 330 core
 layout (location = 0) in vec3 a_position;
@@ -105,7 +105,7 @@ To set the output of the vertex shader we have to assign the position data to th
 gl_Position is a [Homogeneous coordinates](https://en.wikipedia.org/wiki/Homogeneous_coordinates). Homogeneous coordinates are needed for perspective projection.
 ### Fragment Shader:
 The fragment shader is the second and final shader that should be created for rendering a textured plane. The fragment shader is all about calculating the color output of your pixels.
-The fragment shader only requires one output variable and that is a vector of size 4 that defines the final color output.
+The fragment shader only requires one output variable **gl_FragColor** and that is a vector of size 4 that defines the final color output.
 
 The basic fragment shader:
 ```
@@ -122,7 +122,7 @@ The texture2D function returns a texel, i.e. the (color) value of the texture fo
 
 * **texcoord** - the input value of the coordinates for texture mapping obtain from vertex shader;
 * **texture_1** - a global shader variable for single 2D texture;
-* **gl_FragColor** - the output variable and that is a vector of size 4 that defines the final color output that we should calculate.
+* **gl_FragColor** - the output variable of final color value that we should calculate.
 ### Shader program:
 A shader program encapsulates a vertex and fragment shader pair linked to form a shader program.
 The LibGDX provides the own implementation of the [ShaderProgram](https://libgdx.badlogicgames.com/ci/nightlies/docs/api/com/badlogic/gdx/graphics/glutils/ShaderProgram.html).
@@ -170,7 +170,7 @@ private val projectionMatrix = Matrix4().apply {
     val fov = 67f
     val aspectRation = (Gdx.graphics.width / Gdx.graphics.height).toFloat()
     setToProjection(near, far, fov, aspectRation)
-    }
+}
 ```
 All parameters that have been passed to the **setToProjection** method are responsible for the camera frustum:
 ![](https://raw.githubusercontent.com/Dmytro-Pashko/GdxSandbox/feature/testing/description/frustum.png)
@@ -178,12 +178,12 @@ All parameters that have been passed to the **setToProjection** method are respo
 The frustum is used to determine what the camera can see. Everything that is inside or intersects with the camera's view-frustum has to be rendered, all the rest can be ignored.
 
 We create a transformation matrix for each of the above-mentioned steps: model, view and projection matrix.
-After all, let's define the final combined matrix, declared a uniform in the vertex shader and sent the matrix to the shaders where we transform our vertex coordinates. 
+After all, we should define the final combined matrix, declared a uniform in the vertex shader and sent the matrix to the shaders where we transform our vertex coordinates. 
 ```
 combinedMatrix.set(projectionMatrix).mul(viewMatrix).mul(modelMatrix)
 shader.setUniformMatrix("combined", combinedMatrix)
 ```
-More detauled information about camera and perspective projection you can read at following articles 
+More detailed information about camera and perspective projection you can read at following articles 
 * [Coordinate Systems](https://learnopengl.com/Getting-started/Coordinate-Systems)
 * [Working with Camera](https://learnopengl.com/Getting-started/Camera)
 ### Putting it all together
@@ -212,10 +212,257 @@ fun draw() {
 ![Gif](https://raw.githubusercontent.com/Dmytro-Pashko/GdxSandbox/feature/testing/description/plane3d.gif)
 
 The full code of this scene you can find at following link [Plane3dScene.kt](https://github.com/Dmytro-Pashko/GdxSandbox/blob/feature/testing/core/src/com/dpashko/sandbox/scene/plane3d/Plane3dScene.kt)
+# Cubes 3D
+I'm sure that you're astonished by the number of various things you need to work in order to implement a simple scene.
+Actually, the plane from previous scene that rotates around the axis looks pretty simple and primitive, but it's necessary to understand the basic stages of working with the OpenGL.
+In this part, we will delve into the camera matrices and analyze their logic in detail.
+### Camera
+In fact, the OpenGL itself is not familiar with the concept of the camera, but we can try to simulate it. When we're talking about camera/view space we're talking about all the vertex coordinates as seen from the camera's perspective as the origin of the scene: the view matrix transforms all the world coordinates into view coordinates that are relative to the camera's position and direction. To define a camera we need its position in world space, the direction it's looking at and vector pointing upwards from the camera. 
+
+Lets define camera view matrix:
+```
+private val viewMatrix = Matrix4().apply {
+    val position = Vector3(0f, -8f, 1f)
+    val target = Vector3(0f, 0f, 0f)
+    val direction = Vector3(position).sub(target).nor()
+    val right = Vector3.X
+    val up = Vector3(direction).crs(right)
+    setToLookAt(position, target, up)
+}
+```
+* **position** - the camera position in world space;
+* **target** - the camera target point;
+* **direction** -  the normalized vector of the camera direction;
+* **right** - a vector that represents the positive x-axis of the camera space;
+* **up** - a vector pointing upwards from the camera position.
+
+In setToLookAt() method we have to specify a camera position, a target position and a vector that represents the up vector in world space.
+
+This image shows the placement of objects in this scene:
+
+![](https://raw.githubusercontent.com/Dmytro-Pashko/GdxSandbox/feature/testing/description/cubes3d_scene.png)
+
+The last thing we need to define for camera is the projection matrix. The projection matrix defines a parameters of a camera frustum.
+Frustum is a truncated rectangular pyramid used to define the viewable region and its projection onto the screen:
+
+![](https://raw.githubusercontent.com/Dmytro-Pashko/GdxSandbox/feature/testing/description/frustum_update.png)
+
+Its first and second parameter set the near and far plane of the frustum.
+Lets define the near plane distance to 0.1 and the far plane distance to 32.0, because only the vertices between the near and far plane and inside the camera frustum will be rendered.
+The third parameter defines the fov value([LINK](https://en.wikipedia.org/wiki/Angle_of_view)), that stands for field of view(Angle of view) and sets how large the viewspace is. 
+The last parameter sets the aspect ratio which is calculated by dividing the viewport's width by its height.
+```
+private val projectionMatrix = Matrix4().apply {
+    val near = 0.1f
+    val far = 32f
+    val fov = 67f
+    val aspectRatio = Gdx.graphics.width / Gdx.graphics.height
+    setToProjection(near, far, fov, aspectRatio.toFloat())
+}
+```
+* **near** - a near plane distance of camera frustum;
+* **far** -a far plane distance of camera frustum;
+* **fov** - the field of view of the height, in degrees;
+* **aspectRatio** - the aspect ratio of the viewport.
+
+More detailed information about the perspective camera you can find at [LINK](https://learnopengl.com/Getting-started/Camera).
+### Cube model
+At first, we need to create a data class for our cubes that will have its own position, size, and texture:
+```
+data class Cube(val position: Vector3, val size: Float = 1f, val texture: Texture) {
+    private val vertices: VertexData
+    private val indices: IndexData
+    private val modelMatrix: Matrix4
+
+    fun draw(shader: ShaderProgram, cameraMatrix: Matrix4) {
+           
+    }
+        
+    fun dispose() {
+       
+}
+```
+
+All the cubes have the same vertices, therefore we need to create them once and reuse for each cube.
+Since we were working with a two-dimensional plane, even in three-dimensional space, and we should extend the 2D plane to a 3D cube. For the cube model, we need to define 24 vertices (6 faces * 4 vertices).
+
+The following image shows the qube in three-dimensional space with edge length equal to 1.0 and origin in middle of the cube:
+
+![](https://raw.githubusercontent.com/Dmytro-Pashko/GdxSandbox/feature/testing/description/cube.png)
+
+The following code snippet represents vertices creation:
+
+```
+private fun createVertexData(): VertexData {
+    val vertices = floatArrayOf(
+    // Bottom face                                 ___________
+    -.5f, -.5f, -.5f, 0f, 0f,   //0                |16     17|
+    .5f, -.5f, -.5f, 1f, 0f,    //1                |  BACK   |
+    .5f, .5f, -.5f, 1f, 1f,     //2                |         |
+    -.5f, .5f, -.5f, 0f, 1f,    //3                |19_____18|
+    // Top face                         _________________________________
+    -.5f, -.5f, .5f, 0f, 0f,    //4     |9       8||7       6||12     13|
+    .5f, -.5f, .5f, 1f, 0f,     //5     |   LEFT  ||   TOP   ||  RIGHT  |
+    .5f, .5f, .5f, 1f, 1f,      //6     |         ||         ||         |
+    -.5f, .5f, .5f, 0f, 1f,     //7     |10_____11||4_______5||15_____14|
+    // Left face                                   ___________
+    -.5f, .5f, .5f, 1f, 0f,     //8                |23     22|
+    -.5f, .5f, -.5f, 1f, 1f,    //9                |  FRONT  |
+    -.5f, -.5f, -.5f, 0f, 1f,   //10               |         |
+    -.5f, -.5f, .5f, 0f, 0f,    //11               |20_____21|
+    // Right face                                  ___________
+    .5f, .5f, .5f, 1f, 0f,      //12               |0       1|
+    .5f, .5f, -.5f, 1f, 1f,     //13               |  BOTTOM |
+    .5f, -.5f, -.5f, 0f, 1f,    //14               |         |
+    .5f, -.5f, .5f, 0f, 0f,     //15               |3_______2|
+    // Back face
+    -.5f, -.5f, -.5f, 0f, 1f,   //16
+    .5f, -.5f, -.5f, 1f, 1f,    //17
+    .5f, -.5f, .5f, 1f, 0f,     //18
+    -.5f, -.5f, .5f, 0f, 0f,    //19
+    // Front Face
+    -.5f, .5f, -.5f, 0f, 1f,    //20
+    .5f, .5f, -.5f, 1f, 1f,     //21
+    .5f, .5f, .5f, 1f, 0f,      //22
+    -.5f, .5f, .5f, 0f, 0f      //23
+    )
+    return VertexBufferObjectWithVAO(true, vertices.size, 
+    VertexAttribute.Position(),VertexAttribute.TexCoords(0)).apply {
+        setVertices(vertices, 0, vertices.size)
+    }
+}
+```
+In our understanding, each face of the cube is described by 4 vertices. But, the OpenGL interprets the vertices as a sequence of triangles, points, or lines. For us, the most suitable privative is a triangle formed by 3 vertices. For defining triangles we will use indices. The indices control what order the vertices are received in, and indices can specify the same array element more than once.
+
+Lets define the qube indices:
+
+```
+private fun createIndices(): IndexData {
+    val indices = shortArrayOf(
+    0, 1, 2, 2, 3, 0,       // Bottom
+    4, 5, 6, 6, 7, 4,       // Top
+    8, 9, 10, 10, 11, 8,    // Left
+    12, 13, 14, 14, 15, 12, // Right
+    16, 17, 18, 18, 19, 16, // Back
+    20, 21, 22, 22, 23, 20  // Front
+    )
+    return IndexArray(indices.size).apply {
+    setIndices(indices, 0, indices.size)
+    }
+}
+```
+The following image shows the triangulated faces of the cube model:
+
+![](https://raw.githubusercontent.com/Dmytro-Pashko/GdxSandbox/feature/testing/description/cube_indices.png)
+
+Each cube will look the same but will only differ in where it's located in the world with each a different rotation. The graphical layout of the cube is already defined so we don't have to change our buffers or attribute arrays when rendering more objects. The only thing we have to change for each object is its model matrix where we transform the cubes into the world.
+
+Lets define the model matrix:
+```
+private val modelMatrix = Matrix4()
+    .translate(position)
+    .scale(size, size, size)
+
+```
+We used [translate(float x, float y, float z)](https://libgdx.badlogicgames.com/ci/nightlies/docs/api/com/badlogic/gdx/math/Matrix4.html#translate-float-float-float-) and [scale(float scaleX, float scaleY, float scaleZ)](https://libgdx.badlogicgames.com/ci/nightlies/docs/api/com/badlogic/gdx/math/Matrix4.html#scale-float-float-float-) from the LibGDX in onrder
+to reduce the amount of work with matrices.
+
+Information about Matrix-Vector multiplication(scaling, translation and rotation) you can find at [LINK](https://learnopengl.com/Getting-started/Transformations).
+
+Additionally, we should add method to rorate our boxes around specified axis and angle. For this purposes we will use [rotate(Vector3 axis, float degrees))](https://libgdx.badlogicgames.com/ci/nightlies/docs/api/com/badlogic/gdx/math/Matrix4.html#rotate-com.badlogic.gdx.math.Vector3-float-) method from the LibGDX Api in order to multiplies the model matrix with a (counter-clockwise) rotation matrix:
+```
+fun rotate(axis: Vector3, degree: Float) {
+    modelMatrix.rotate(axis, degree)
+}
+```
+* **axis** - The vector axis to rotate around.
+* **degrees** - The angle in degrees.
+
+Finally, to render cube we should implement the **draw** method in order to encapsulate rendering logic for each cube. This method should include the following steps:
+1. Calculate the combined matrix and bind to shader program:
+```
+shader.setUniformMatrix("combined", tmp.set(combinedCameraMatrix).mul(modelMatrix))
+```
+
+3. Bind the shader program with cube vertices and texture:
+```
+Gdx.gl.glBindTexture(GL_TEXTURE_2D, texture.textureObjectHandle) 
+vertices.bind(shader)
+```
+5. Render primitives from array data:
+```
+Gdx.gl.glDrawElements(GL_TRIANGLES, indices.numIndices, GL_UNSIGNED_SHORT, indices.buffer)
+```
+7. Unbind the vertices and texture:
+```
+vertices.unbind(shader)
+```
+The following code snippet represent the cube render method:
+```
+fun draw(shader: ShaderProgram, combinedCameraMatrix: Matrix4) {
+    shader.setUniformMatrix("combined", tmp.set(combinedCameraMatrix).mul(modelMatrix))
+    Gdx.gl.glBindTexture(GL_TEXTURE_2D, texture.textureObjectHandle)
+    vertices.bind(shader)
+    Gdx.gl.glDrawElements(GL_TRIANGLES, indices.numIndices, GL_UNSIGNED_SHORT, indices.buffer)
+    vertices.unbind(shader)
+    }
+```
+* **tmp** - variable used to store the result of matrices multiplication.
+
+Great job, we finished with cube model.
+### Putting it all together
+Eventually, we defined the Cube class we can create a many cubes with diffent position, size, texture and rotation. 
+We'll define 7 cubes with unique position, texture, and size:
+```
+boxes = mapOf(
+    Box(position = Vector3(2f, 1f, -2f), texture = Texture(FileProvider.box1)) to getRandomDirection(),
+    Box(position = Vector3(-2f, 1f, -2f), texture = Texture(FileProvider.box2)) to getRandomDirection(),
+    Box(position = Vector3(0f, -2f, -2f), texture = Texture(FileProvider.box3)) to getRandomDirection(),
+    Box(position = Vector3.Zero, texture = Texture(FileProvider.box4), size = 2f) to Vector3.Zero,
+    Box(position = Vector3(-2f, -1f, 2f), texture = Texture(FileProvider.box5)) to getRandomDirection(),
+    Box(position = Vector3(2f, -1f, 2f), texture = Texture(FileProvider.box6)) to getRandomDirection(),
+    Box(position = Vector3(0f, 2f, 2f), texture = Texture(FileProvider.box7)) to getRandomDirection()
+)
+```
+Our shaders should draw a textured triangle, nothing special, and for this purpose, we'll use shaders from the previous scene.
+
+### Render loop
+Within the render loop, we want to update camera rotation around Z-axis by 0.25 degree per frame:
+```
+viewMatrix.rotate(Vector3.Z, 0.25f)
+combinedCameraMatrix.set(projectionMatrix).mul(viewMatrix)
+```
+And call the render method for each created box object. We also added a unique rotation axis to each box.
+So, we'll create a small loop within the render loop that renders our cubes with a different model matrix and texture each time:
+```
+for ((box, rotationAxis) in boxes) {
+    box.rotate(rotationAxis, 0.25f)
+    box.draw(shader, combinedCameraMatrix)
+}
+```
+The following code snippet represents rendering method:
+```
+override fun draw() {
+    Gdx.gl.glEnable(GL_DEPTH_TEST)
+    Gdx.gl.glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT)
+    // Rotate camera around Z axis by 0.25 degree.
+    viewMatrix.rotate(Vector3.Z, 0.25f)
+    combinedCameraMatrix.set(projectionMatrix).mul(viewMatrix)
+    shader.begin()
+    for ((box, rotationAxis) in boxes) {
+        box.rotate(rotationAxis, 0.25f)
+        box.draw(shader, combinedCameraMatrix)
+    }
+    shader.end()
+}
+```
+## Result
+If you run this scene you should get something like this:
+
+![](https://raw.githubusercontent.com/Dmytro-Pashko/GdxSandbox/feature/testing/description/cube3d.gif)
+
+The full code of this scene you can find at following link [Box3dScene.kt](https://github.com/Dmytro-Pashko/GdxSandbox/blob/feature/testing/core/src/com/dpashko/sandbox/scene/cube3d/Cubes3dScene.kt)
 # Resources & References:
 All project assets from free resources(but you can contact me in any copyright issues) or created by myself.
-
-* Best portal for learning the OpenGL [learnopengl.com](https://learnopengl.com/);
-
 # License:
 This project is licensed under the [Apache 2 License](http://www.apache.org/licenses/LICENSE-2.0.html), meaning you can use it free of charge, without strings attached in commercial and non-commercial projects.
