@@ -1,49 +1,35 @@
-# LibGDX Sandbox
+# Overview:
+Hi, I am an Android developer who has long developed a desire to learn the basics of computer graphics (specifically using [OpenGL](https://www.opengl.org/)). 
 
-The 3D engine prototype based on LibGDX ([Link](https://https://libgdx.badlogicgames.com)) and Kotlin ([Link](https://https://kotlinlang.org)).
+Starting from the first 3D engines (Id Tech 1, Quake Engine) and to modern such as Unreal Engine 4, Unity, CryEngine, Source, they have pivotal basic technologies and concepts of computer graphics. Actually, understanding how it works under the hood will allow us to work with any type of engine and take control over all parts of rendering process.
 
-The main purpose of this repo is to exploring and analyzing the Core API of LibGDX.
+Actually, I want to share the obtained knowledge for everyone who also wants to work with 3D graphics or the OpenGL too. Moreover, this repository is useful to understand the LibGDX API.
 
-In fact, I realized that I need a deep knowledge of the Math(Vectores, Matrices) OpenGL 
-rendering process and the basic logic of GLSL shaders after analyzing a LibGDX classes.
+I've faced with the [LibGDX](https://libgdx.badlogicgames.com/) after searching a cross-platform tool for convenient working with computer graphics which provides simple API to interact with GPU. In fact, the most required things for me was the ability to create the cross-platform 3D application(Windows, Android, iOS) using OpenGL API.
 
-# Main point
-The main idea is to research basic prototype that can provide the flexible core functionality of the 3D engine:
+Briefly, the LibGDX is a Java cross-platform framework that released its first version in 2009. It comes with an OpenGL ES 2.0 and 3.0 wrapper interface, which is the one that lets us perform 3D development.
+Also, the LibGDX offers convenient classes to avoid a lot of boilerplate code,  the all LibGDX features described [here](https://libgdx.badlogicgames.com/features.html).
 
-* Maintainable engine API;
-* Resource loading(models, textures, materials, sounds, scenes, configurations) from the file storage.
-* Rendering API for 2D(UI widgets and debug info) and 3D scenes(3d objects, light, shadows, materials, filtering).
-* Object generations(textures, meshes, models);
-* UI framework to create basic customizable UI widgets(button, label, list, spinner, chooser panels etc.) and UI editor;
-* Async invocations and multithreading, time events;
-* Physic and AI simulation;
-* UI builder and scene editor;
-* Sound engine;
+In this repository, I'm using [Kotlin](https://kotlinlang.org/) since it allows us to reduce the amount of boilerplate code that we need to write in Java.
+# Research:
+Currently, I've made a few articles in order to describe the general things in graphic programming like vertex data creation, transformations, coordinate system, projection view, texturing, and shaders. These are essential things to build the powerful 3D applications.
 
-The mainline of this repository is the master branch that will contain the main feature implementations except debugging or test scene.
-utilities, additional custom implementations(path finding, texture generation, noise generation, shaders and etc.).
+We will use some math (linear algebra, geometry, and trigonometry) along with the articles, we can't avoid it :). Don't worry, I will try to explain all required the concepts of math.
 
-# OpenGL exploration:
-Currently, I've implemented few scenes to analyze OpenGL rendering process, 
-this samples based on native "OpenGl" rendering process with custom vertex and fragment shaders implementation.
+I can assume that you familiar with Java or Kotlin and have installed the LibGDX, Java Development Kit (JDK) 
+otherwise, a simple Google search will do it :)
+
+This research is divided into the following chapters:
+* Part 1 - The OpenGL introduction.
+* Part 2 - Texturing.
+* Part 3 - Matrices and transformations.
+* Part 4 - Model loading.
+* Part 5 - Lightning.
+
+In each chapter, I'm trying to implement everything myself to a better understanding of all concepts, because doing things by yourself is really fun and exciting and gives you a great understanding of the process.
 
 **Note:**
-*To simplify this examples I've used a LibGDX API(Loaders, Math API, Pixmap and Texture), 
-but this does not affect the understanding of the basic OpenGL functionality and most of the rendering parts were implemented by self.*
-
-1. The 3D render to traw textured plane with rotation around Z axis.([link](https://github.com/Dmytro-Pashko/GdxSandbox/blob/feature/gltest/core/src/com/dpashko/sandbox/scene/plane3d/Plane3dScene.kt))
-![](https://github.com/Dmytro-Pashko/GdxSandbox/raw/master/description/plane_scene.gif)
-
-2. The 3D render to draw textured boxes in the 3D space with random rotations with Perspective Camera view.([link](https://github.com/Dmytro-Pashko/GdxSandbox/blob/feature/gltest/core/src/com/dpashko/sandbox/scene/box3d/Box3dScene.kt))
-![](https://github.com/Dmytro-Pashko/GdxSandbox/raw/master/description/box_scene.gif)
-
-3. The 3D test scene to test process of loading 3D objects with texture wrapping and custom matertials, 
-enviroment(light) simulation and custom input controller for perspective camera(movement - WASD + mouse 1, rotation - mouse 2, zoom - mouse 3).
-([link](https://github.com/Dmytro-Pashko/GdxSandbox/blob/feature/gltest/core/src/com/dpashko/sandbox/scene/model3d/Model3dScene.kt))
-![](https://github.com/Dmytro-Pashko/GdxSandbox/raw/master/description/model_scene.gif)
-
-# Resources:
-All project assets downloaded from free resources(but you can contact me in any copyright issues) or created by myself.
-
+*To simplify some things I've used a LibGDX API. But, it doesn't affect the understanding of the basic OpenGL functionality and most of the rendering parts were implemented by self.*
 # License:
-This project is licensed under the [Apache 2 License](http://www.apache.org/licenses/LICENSE-2.0.html), meaning you can use it free of charge, without strings attached in commercial and non-commercial projects except assets(fonts, 3d models, textures, sounds, images, shaders) licensed under [CC BY-NC 3.0](https://creativecommons.org/licenses/by-nc-sa/3.0/) license for non-commercial purposes.
+All code samples, gifs, and images are licensed under the terms of the CC BY-NC 4.0 license as published by Creative Commons, either version 4 of the License You can find a human-readable format of the license [here](https://creativecommons.org/licenses/by-nc/4.0/) and the full license [here](https://creativecommons.org/licenses/by-nc/4.0/legalcode).
+When attributing any of the licensed works, please include a copyright notice including a hyperlink to the copyrighted work and a link to the specific license.
