@@ -20,11 +20,11 @@ I can assume that you familiar with Java or Kotlin and have installed the LibGDX
 otherwise, a simple Google search will do it :)
 
 This research is divided into the following chapters:
-* Part 1 - The OpenGL introduction.
-* Part 2 - Texturing.
-* Part 3 - Matrices and transformations.
-* Part 4 - Model loading.
-* Part 5 - Lightning.
+* Part 1 - The OpenGL introduction. //TBD
+* Part 2 - Texturing. //TBD
+* Part 3 - Matrices and transformations. //TBD
+* Part 4 - Model loading. //TBD
+* Part 5 - Lightning. //TBD
 
 In each chapter, I'm trying to implement everything myself to a better understanding of all concepts, because doing things by yourself is really fun and exciting and gives you a great understanding of the process.
 
