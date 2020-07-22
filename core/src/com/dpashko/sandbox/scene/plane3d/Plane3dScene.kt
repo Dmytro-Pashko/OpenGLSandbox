@@ -5,9 +5,7 @@ import com.badlogic.gdx.graphics.GL20.*
 import com.badlogic.gdx.graphics.Pixmap
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.VertexAttribute
-import com.badlogic.gdx.graphics.glutils.IndexArray
-import com.badlogic.gdx.graphics.glutils.ShaderProgram
-import com.badlogic.gdx.graphics.glutils.VertexBufferObjectWithVAO
+import com.badlogic.gdx.graphics.glutils.*
 import com.badlogic.gdx.math.Matrix4
 import com.badlogic.gdx.math.Vector3
 import com.dpashko.sandbox.files.FileProvider
@@ -19,9 +17,6 @@ class Plane3dScene @Inject internal constructor() : Scene {
 
     private lateinit var shader: ShaderProgram
     private lateinit var plane: Plane
-
-    // Plane position and rotation matrix
-    private val modelMatrix = Matrix4().translate(0f, 0f, 0f)
 
     // Camera position and rotation matrix
     private val viewMatrix = Matrix4()
@@ -36,8 +31,8 @@ class Plane3dScene @Inject internal constructor() : Scene {
         setToProjection(near, far, fov, aspectRation)
     }
 
-    // Combined projection matrix.
-    private val combinedMatrix = Matrix4()
+    // Combined camera matrix matrix.
+    private val cameraMatrix = Matrix4().set(projectionMatrix).mul(viewMatrix)
 
     override fun init() {
         shader = ShaderProvider.simple3dShader().apply {
@@ -45,7 +40,7 @@ class Plane3dScene @Inject internal constructor() : Scene {
                 throw IllegalStateException("Shader is not compiled: $log")
             }
         }
-        plane = Plane(Texture(Pixmap(FileProvider.sky)))
+        plane = Plane(Vector3.Zero, Texture(Pixmap(FileProvider.sky)))
     }
 
     override fun draw() {
@@ -53,16 +48,14 @@ class Plane3dScene @Inject internal constructor() : Scene {
         Gdx.gl.glEnable(GL_DEPTH_TEST)
         Gdx.gl.glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT)
         shader.begin()
-        combinedMatrix.set(projectionMatrix).mul(viewMatrix).mul(modelMatrix)
-        shader.setUniformMatrix("combined", combinedMatrix)
-        plane.draw(shader)
+        plane.draw(shader, cameraMatrix)
         shader.end()
     }
 
     private val rotationSpeed = 100f
     private fun rotatePlane() {
         val angle = Gdx.graphics.deltaTime * rotationSpeed
-        modelMatrix.rotate(Vector3.Y, angle)
+        plane.rotate(Vector3.Y, angle)
     }
 
     override fun dispose() {
@@ -70,36 +63,49 @@ class Plane3dScene @Inject internal constructor() : Scene {
         shader.dispose()
     }
 
-    data class Plane(val texture: Texture) {
-        private var indices = createIndices()
-        private var vertices = createVertices()
+    data class Plane(val position: Vector3, val texture: Texture) {
+        private val indices = createIndices()
+        private val vertices = createVertices()
+        private val tmp = Matrix4()
+        private val modelMatrix = Matrix4().translate(position)
 
-        fun draw(shader: ShaderProgram) {
+        fun draw(shader: ShaderProgram, cameraMatrix: Matrix4) {
+            shader.setUniformMatrix("combined", tmp.set(cameraMatrix).mul(modelMatrix))
             Gdx.gl.glBindTexture(GL_TEXTURE_2D, texture.textureObjectHandle)
             vertices.bind(shader)
-            Gdx.gl.glDrawElements(GL_TRIANGLES, vertices.numVertices, GL_UNSIGNED_SHORT, indices.buffer)
+            Gdx.gl.glDrawElements(GL_TRIANGLES, indices.numIndices, GL_UNSIGNED_SHORT, indices.buffer)
             vertices.unbind(shader)
         }
 
-        private fun createVertices() =
-                VertexBufferObjectWithVAO(true, 4, VertexAttribute.Position(), VertexAttribute.TexCoords(0)).apply {
-                    val vertices = floatArrayOf(
-                            // Position(x,y,z), Texture coordinates (u,v)
-                            -1f, 1f, 0f, 0f, 1f,
-                            -1f, -1f, 0f, 0f, 0f,
-                            1f, -1f, 0f, 1f, 0f,
-                            1f, 1f, 0f, 1f, 1f)
-                    setVertices(vertices, 0, vertices.size)
-                }
+        fun rotate(axis: Vector3, degree: Float) {
+            modelMatrix.rotate(axis, degree)
+        }
+
+        private fun createVertices(): VertexData {
+            val vertices = floatArrayOf(
+                    // Position(x,y,z), Texture coordinates (u,v)
+                    -1f, 1f, 0f, 0f, 1f,
+                    -1f, -1f, 0f, 0f, 0f,
+                    1f, -1f, 0f, 1f, 0f,
+                    1f, 1f, 0f, 1f, 1f)
+            return VertexBufferObjectWithVAO(true, vertices.size,
+                    VertexAttribute.Position(), VertexAttribute.TexCoords(0)).apply {
+                setVertices(vertices, 0, vertices.size)
+            }
+        }
 
         // Plane mesh separated by two triangles.                   0╔═╗3
         // Each triangle contains 3 vertices (0 1 2) and (2 3 0).   1╚═╝2
-        private fun createIndices() = IndexArray(6).apply {
-            setIndices(shortArrayOf(0, 1, 2, 2, 3, 0), 0, 6)
+        private fun createIndices(): IndexData {
+            val indices = shortArrayOf(0, 1, 2, 2, 3, 0)
+            return IndexArray(indices.size).apply {
+                setIndices(indices, 0, indices.size)
+            }
         }
 
         fun dispose() {
             vertices.dispose()
+            indices.dispose()
             texture.dispose()
         }
     }
