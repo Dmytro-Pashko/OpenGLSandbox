@@ -20,7 +20,7 @@ I can assume that you familiar with Java or Kotlin and have installed the LibGDX
 otherwise, a simple Google search will do it :)
 
 This research is divided into the following chapters:
-* [Part 1 - The OpenGL introduction.](https://github.com/Dmytro-Pashko/OpenGLSandbox/tree/chapter_1)
+* [Part 1 - The OpenGL introduction and first scene](https://github.com/Dmytro-Pashko/OpenGLSandbox/tree/chapter_1)
 * Part 2 - Texturing. //TBD
 * Part 3 - Matrices and transformations. //TBD
 * Part 4 - Model loading. //TBD
