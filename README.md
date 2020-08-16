@@ -21,10 +21,6 @@ otherwise, a simple Google search will do it :)
 
 This research is divided into the following chapters:
 * [Part 1 - The OpenGL introduction and first scene](https://github.com/Dmytro-Pashko/OpenGLSandbox/tree/chapter_1)
-* Part 2 - Texturing. //TBD
-* Part 3 - Matrices and transformations. //TBD
-* Part 4 - Model loading. //TBD
-* Part 5 - Lightning. //TBD
 
 In each chapter, I'm trying to implement everything on my own for a better understanding of all concepts, because doing things by yourself is really fun and exciting and gives you a great understanding of the process.
 
