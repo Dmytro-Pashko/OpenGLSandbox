@@ -20,7 +20,7 @@ I can assume that you familiar with Java or Kotlin and have installed the LibGDX
 otherwise, a simple Google search will do it :)
 
 This research is divided into the following chapters:
-* [Part 1 - The OpenGL introduction and first scene](https://github.com/Dmytro-Pashko/OpenGLSandbox/tree/chapter_1).
+* [Part 1 - The OpenGL introduction and first scene](https://github.com/Dmytro-Pashko/OpenGLSandbox/blob/chapter_1/README.md).
 
 In each chapter, I'm trying to implement everything on my own for a better understanding of all concepts, because doing things by yourself is really fun and exciting and gives you a great understanding of the process.
 
