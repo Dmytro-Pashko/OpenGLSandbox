@@ -1,7 +1,7 @@
 # Overview:
 Hi, I am an Android developer who has developed a desire to learn the basics of computer graphics (specifically using [OpenGL](https://www.opengl.org/)). 
 
-Starting from the first 3D engines (Id Tech 1, Quake Engine) and going to modern such as Unreal Engine 4, Unity, CryEngine, Source, they have pivotal basic technologies and concepts of computer graphics. Actually, understanding how it works under the hood will allow us to work with any type of engine and take control over all parts of rendering process.
+Starting from the first 3D engines (Id Tech 1, Quake Engine) and going to modern such as Unreal Engine 4, Unity, CryEngine, Source, they have pivotal basic technologies and concepts of computer graphics. Actually, understanding of technologies and how it works under the hood allow us to work with any type of engine and take control over all parts of rendering process.
 
 Actually, I want to share the obtained knowledge with everyone who also wants to work with 3D graphics or the OpenGL too. Moreover, this repository is useful to understand the LibGDX API.
 
