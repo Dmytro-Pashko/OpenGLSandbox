@@ -1,4 +1,3 @@
-In the preceding code snippet, w
 
 # Cubes 3D
 I'm sure that you're astonished by the number of various things you need to work in order to implement a simple scene.
