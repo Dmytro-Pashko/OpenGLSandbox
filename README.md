@@ -1,7 +1,7 @@
 
-# Cubes 3D
+# Matrices for computer graphic in details
 I'm sure that you're astonished by the number of various things you need to work in order to implement a simple scene.
-Actually, the plane from [Link](https://github.com/Dmytro-Pashko/OpenGLSandbox/blob/chapter_1/README.md) previous scene that rotates around the axis looks pretty simple and primitive, but it's necessary to understand the basic stages of working with the OpenGL.
+Actually, the plane from ([Link](https://github.com/Dmytro-Pashko/OpenGLSandbox/blob/chapter_1/README.md)) previous scene that rotates around the axis looks pretty simple and primitive, but it's necessary to understand the basic stages of working with the OpenGL.
 In this part, we will delve into the matrices and analyze their impact in details.
 ### Camera
 In fact, the OpenGL itself is not familiar with the concept of the real world camera, but we can try to simulate it. When we're talking about camera/view space we're talking about all the vertex coordinates as seen from the camera's perspective as the origin of the scene: the view matrix transforms all the world coordinates into view coordinates that are relative to the camera's position and direction. To define a camera we need its position in world space, the direction it's looking at and vector pointing upwards from the camera. 
