@@ -145,14 +145,17 @@ open class EditorCameraController(private var camera: Camera) : InputAdapter() {
     override fun touchDragged(screenX: Int, screenY: Int, pointer: Int): Boolean {
         val result = super.touchDragged(screenX, screenY, pointer)
         if (result || button < 0) return result
-        val deltaX = (screenX - startX) / Gdx.graphics.width
-        val deltaY = (startY - screenY) / Gdx.graphics.height
+        val deltaX = (screenX - startX) * (0.1f * camera.position.z) / Gdx.graphics.width
+        val deltaY = (startY - screenY) * (0.1f * camera.position.z) / Gdx.graphics.height
         startX = screenX.toFloat()
         startY = screenY.toFloat()
         return process(deltaX, deltaY, button)
     }
 
-    override fun scrolled(amount: Int) = zoom(amount * scrollFactor * translateUnits)
+
+    override fun scrolled(amountX: Float, amountY: Float): Boolean {
+        return zoom(amountY * scrollFactor * translateUnits)
+    }
 
     private fun zoom(amount: Float): Boolean {
         return if (isCanZoomIn(amount) || isCanZoomOut(amount)) {
