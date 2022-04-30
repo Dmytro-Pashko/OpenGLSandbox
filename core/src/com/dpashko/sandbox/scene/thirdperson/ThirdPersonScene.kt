@@ -8,8 +8,6 @@ import com.badlogic.gdx.graphics.PerspectiveCamera
 import com.badlogic.gdx.graphics.g3d.Environment
 import com.badlogic.gdx.graphics.g3d.ModelBatch
 import com.badlogic.gdx.graphics.g3d.ModelInstance
-import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute
-import com.badlogic.gdx.graphics.g3d.environment.PointLight
 import com.badlogic.gdx.math.Vector3
 import com.dpashko.sandbox.material.MaterialProvider
 import com.dpashko.sandbox.model.ModelProvider
@@ -34,7 +32,7 @@ class ThirdPersonScene @Inject internal constructor() : Scene {
         actor = Actor(
             Vector3.Zero,
             Vector3.Y,
-            ModelInstance(ModelProvider.createSuzanne(material = MaterialProvider.diffuse(Color.GREEN)))
+            ModelInstance(ModelProvider.createPerson(material = MaterialProvider.diffuse(Color.GRAY)))
         ).apply {
             boundingBox?.let {
                 boundingBoxShader = BoundingBoxShader(it)
@@ -48,14 +46,7 @@ class ThirdPersonScene @Inject internal constructor() : Scene {
         cameraController = ThirdPersonCameraController(actor, camera).also {
             Gdx.input.inputProcessor = it
         }
-        environment = Environment().apply {
-            set(ColorAttribute.createDiffuse(Color.GREEN))
-            add(PointLight().apply {
-                position.set(0f, 0f, 10f)
-                intensity = 50f
-            })
 
-        }
         gui = ThirdPersonSceneGui().apply {
             init()
         }
@@ -72,10 +63,10 @@ class ThirdPersonScene @Inject internal constructor() : Scene {
         boundingBoxShader.render(camera)
         // Draw models.
         batch.begin(camera)
-        batch.render(actor.model, environment)
+        batch.render(actor.model)
         batch.end()
         // Draw GUI.
-        gui.update(camera.position, camera.direction)
+        gui.update(camera, actor, cameraController.deltaX, cameraController.deltaY)
         gui.draw()
     }
 

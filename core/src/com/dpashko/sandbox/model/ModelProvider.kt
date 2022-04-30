@@ -31,6 +31,11 @@ object ModelProvider {
             scale: Float = 1f,
             material: Material = MaterialProvider.diffuse(Color.GRAY)) = loadModel(FileProvider.suzanneModel, material)
 
+    @JvmOverloads
+    fun createPerson(
+        scale: Float = 1f,
+        material: Material = MaterialProvider.diffuse(Color.GRAY)) = loadModel(FileProvider.person_1, material)
+
     public fun loadModel(file: FileHandle?, material: Material?): ModelInstance {
         val model = objLoader.loadModel(file, true)
         if (material != null) {

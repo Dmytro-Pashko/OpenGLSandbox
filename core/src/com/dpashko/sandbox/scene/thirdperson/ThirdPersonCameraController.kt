@@ -12,20 +12,33 @@ class ThirdPersonCameraController(
 ) : InputAdapter() {
 
     /**
+     *
+     */
+    private val zoomVelocity = 0.2f
+
+    /**
+     *
+     */
+    private val rotateVelocity = 0.2f
+
+    /**
      * Distance to Player.
      */
-    private var distanceToPlayer = 3f
+    private var distanceToPlayer = 7f
 
     /**
      * Angle around the player in degrees.
      */
-    private var angleAroundPlayer = 20f
+    private var angleAroundPlayer = 0f
 
     /**
      * Angle between horizontal axis and camera.
      */
-    private var pithAngle = 30f
+    private var pitchAngle = 60f
 
+    private val minPitchAngle = 10f
+
+    private val maxPitchAngle = 70f
 
     private var startX: Int = 0
     private var startY: Int = 0
@@ -33,14 +46,6 @@ class ThirdPersonCameraController(
     private var screenY: Int = 0
     private var button: Int = -1
     private var isTouchedDown = false
-
-    private var cameraDirection = Vector3(0f, 0f, 0f)
-
-    init {
-        cameraDirection = cameraDirection
-            .set(actor.direction)
-        camera.direction.set(cameraDirection)
-    }
 
     fun update() {
         calculateCameraPosition()
@@ -51,48 +56,54 @@ class ThirdPersonCameraController(
     private fun calculateCameraPosition() {
         val offsetX = distanceToPlayer * sin(Math.toRadians(angleAroundPlayer.toDouble()))
         val offsetY = distanceToPlayer * cos(Math.toRadians(angleAroundPlayer.toDouble()))
-        val offsetZ = distanceToPlayer * cos(Math.toRadians(pithAngle.toDouble()))
+        val offsetZ = distanceToPlayer * sin(Math.toRadians(pitchAngle.toDouble()))
 
-        if (actor.position.x >= 0) {
-            camera.position.x = (actor.position.x - offsetX).toFloat()
-        } else {
-            camera.position.x = (actor.position.x + offsetX).toFloat()
-        }
-
-        if (actor.position.y >= 0) {
-            camera.position.y = (actor.position.y - offsetY).toFloat()
-        } else {
-            camera.position.y = (actor.position.y + offsetY).toFloat()
-        }
-
+        camera.position.x = (actor.position.x + offsetX).toFloat()
+        camera.position.y = (actor.position.y + offsetY).toFloat()
         camera.position.z = (actor.position.z + offsetZ).toFloat()
     }
 
+    val tmp: Vector3 = Vector3(0f, 0f, 0f)
     private fun calculateCameraDirection() {
+        camera.up.set(Vector3.Z)
+        camera.lookAt(actor.boundingBox?.getCenter(tmp))
     }
 
 
+    var deltaX = 0F
+    var deltaY = 0F
     override fun touchDragged(screenX: Int, screenY: Int, pointer: Int): Boolean {
-        if (this.screenX != screenX) {
+        if (button == Input.Buttons.LEFT) {
             // Change value only if mouse was moved.
-            if (button == Input.Buttons.LEFT) {
-                angleAroundPlayer += ((startX - screenX).toFloat() * 0.2f) % 360f
+            if (this.screenX != screenX) {
+                deltaX = (startX - screenX).toFloat() * rotateVelocity
+                angleAroundPlayer -= deltaX % 360f
+                startX = screenX
             }
-            startX = screenX
-        }
-        if (this.screenY != screenY) {
             // Change value only if mouse was moved.
-            if (button == Input.Buttons.LEFT) {
-                pithAngle += ((startY - screenY).toFloat() * 0.2f) % 360f
+            if (this.screenY != screenY) {
+                deltaY = ((startY - screenY).toFloat() * rotateVelocity)
+                // Do not to rotate lower that minPitchAngle.
+                if ((deltaY < 0 && pitchAngle < 0)) {
+                    pitchAngle = minPitchAngle
+                    // Do not to rotate upper that maxPitchAngle.
+                } else if (deltaY > 0 && pitchAngle > maxPitchAngle) {
+                    pitchAngle = maxPitchAngle
+                } else {
+                    pitchAngle -= deltaY
+                }
+                startY = screenY
             }
-            startX = screenX
+            return true
+        } else {
+            return super.touchDragged(screenX, screenY, pointer)
         }
-        return super.touchDragged(screenX, screenY, pointer)
     }
+
 
     override fun scrolled(amountX: Float, amountY: Float): Boolean {
-        distanceToPlayer += amountY * 0.1f
-        return super.scrolled(amountX, amountY)
+        distanceToPlayer += amountY * zoomVelocity
+        return true
     }
 
     override fun touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
@@ -100,7 +111,7 @@ class ThirdPersonCameraController(
         startX = screenX
         startY = screenY
         this.button = button
-        return super.touchDown(screenX, screenY, pointer, button)
+        return true
     }
 
     override fun touchUp(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
@@ -108,6 +119,6 @@ class ThirdPersonCameraController(
         startX = 0
         startY = 0
         this.button = -1
-        return super.touchUp(screenX, screenY, pointer, button)
+        return true
     }
 }

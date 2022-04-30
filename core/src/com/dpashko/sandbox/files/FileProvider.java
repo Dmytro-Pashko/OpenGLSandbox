@@ -26,6 +26,8 @@ public class FileProvider {
     public static FileHandle house = Gdx.files.internal("models/house/house.obj");
     public static FileHandle suzanneModelHighPoly = Gdx.files.internal("models/high_poly_suzanne.obj");
 
+    public static FileHandle person_1 = Gdx.files.internal("models/person_1.obj");
+
     //Shaders
     public static FileHandle skybox_vertex_shader = Gdx.files.internal("shaders/skybox_vertex_shader.glsl");
     public static FileHandle skybox_fragment_shader = Gdx.files.internal("shaders/skybox_fragment_shader.glsl");
