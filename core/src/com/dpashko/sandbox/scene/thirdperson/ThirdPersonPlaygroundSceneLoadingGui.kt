@@ -21,7 +21,7 @@ class ThirdPersonPlaygroundSceneLoadingGui {
     }
 
     fun update(progress: Float) {
-        loadingProgressLabel.setText("Loading: {$progress} %")
+        loadingProgressLabel.setText("Loading: ${(100 * progress).toInt()}%")
     }
 
     fun draw() {

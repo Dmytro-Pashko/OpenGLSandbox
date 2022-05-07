@@ -1,0 +1,145 @@
+# Blender 3.1.2 MTL File: 'playground_optimized.blend'
+# www.blender.org
+
+newmtl barrels_big_diffuse
+Ns 1000.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd  ..\textures\playground\barrels_big_diffuse.png
+
+newmtl barrels_small_diffuse
+Ns 1000.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd  ..\textures\playground\barrels_small_diffuse.png
+
+newmtl box_diffuse
+Ns 1000.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd  ..\textures\playground\box_diffuse.png
+
+newmtl fence_diffuse
+Ns 1000.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd  ..\textures\playground\fence_diffuse.png
+
+newmtl ground_diffuse
+Ns 1000.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd  ..\textures\playground\ground_diffuse.png
+
+newmtl half_tunnel_diffused
+Ns 1000.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd  ..\textures\playground\half_tunnel_diffuse.png
+
+newmtl rounded_wall_diffuse
+Ns 1000.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd  ..\textures\playground\rounded_wall_diffuse.png
+
+newmtl side_diffuse
+Ns 1000.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd  ..\textures\playground\side_diffuse.png
+
+newmtl skate_diffuse
+Ns 1000.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd  ..\textures\playground\funbox_diffuse.jpg
+
+newmtl soil_hill_diffuse
+Ns 1000.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd  ..\textures\playground\soil_hill_diffuse.png
+
+newmtl stairs_diffuse
+Ns 1000.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.100000 0.100000 0.100000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd  ..\textures\playground\stairs_diffuse.png
+
+newmtl trailer_diffuse
+Ns 1000.000000
+Ka 0.232759 0.232759 0.232759
+Kd 0.800000 0.800000 0.800000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd  ..\textures\playground\trailer_diffuse.png
+
+newmtl tunnel_diffuse
+Ns 1000.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd  ..\textures\playground\tunnel_diffuse.png

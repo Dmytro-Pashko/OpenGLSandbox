@@ -21,17 +21,17 @@ class ThirdPersonPlaygroundSceneAssetsProvider : AssetManager {
 
     @Inject
     constructor() : super(FileHandleResolver {
-        if (it.contains(".obj", true)) {
-            return@FileHandleResolver Gdx.files.local(MODELS_DIR + it)
-        } else if (it.contains("*.mtl", true)) {
-            return@FileHandleResolver Gdx.files.local(MODELS_DIR + it)
-        } else if (it.contains("*.png", true)) {
-            return@FileHandleResolver Gdx.files.local(TEXTURES_DIR + it)
+        val fileName = it.substringAfterLast("/", it)
+        if (fileName.contains(".obj", true)) {
+            Gdx.files.local(MODELS_DIR + fileName)
+        } else if (fileName.contains(".mtl", true)) {
+            Gdx.files.local(MODELS_DIR + fileName)
+        } else if (fileName.contains(".png", true) || fileName.contains(".jpg")) {
+            Gdx.files.local(TEXTURES_DIR + fileName)
         } else {
-            throw java.lang.IllegalArgumentException("Unsupported asset: $it")
+            throw java.lang.IllegalArgumentException("Unsupported asset: $fileName")
         }
     }, true)
-
 
     fun getPlaygroundModel(): Model {
         return get(PLAYGROUND_MODEL)
@@ -46,4 +46,5 @@ class ThirdPersonPlaygroundSceneAssetsProvider : AssetManager {
         load(ACTOR_MODEL, Model::class.java)
         update()
     }
+
 }
