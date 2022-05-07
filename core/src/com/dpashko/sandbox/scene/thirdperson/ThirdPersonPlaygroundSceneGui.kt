@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.Align
 import com.dpashko.sandbox.skin.SkinProvider
 
-class ThirdPersonSceneGui {
+class ThirdPersonPlaygroundSceneGui {
 
     private val stage = Stage()
     private var cameraInformationLabel = Label(null, SkinProvider.getDefaultSkin())

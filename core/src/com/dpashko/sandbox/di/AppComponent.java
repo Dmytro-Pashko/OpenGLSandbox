@@ -5,7 +5,7 @@ import com.dpashko.sandbox.scene.editor.EditorScene;
 import com.dpashko.sandbox.scene.light3d.Light3dScene;
 import com.dpashko.sandbox.scene.model3d.Model3dScene;
 import com.dpashko.sandbox.scene.plane3d.Plane3dScene;
-import com.dpashko.sandbox.scene.thirdperson.ThirdPersonScene;
+import com.dpashko.sandbox.scene.thirdperson.ThirdPersonPlaygroundScene;
 import dagger.Component;
 
 import javax.inject.Singleton;
@@ -24,7 +24,7 @@ public interface AppComponent {
 
     Model3dScene getModel3dScene();
 
-    ThirdPersonScene getThirdPersonScene();
+    ThirdPersonPlaygroundScene getThirdPersonPlaygroundScene();
 
     @Component.Builder
     interface Builder {
