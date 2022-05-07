@@ -9,32 +9,36 @@ import com.dpashko.sandbox.files.FileProvider
 import com.dpashko.sandbox.material.MaterialProvider
 
 object ModelProvider {
+
     private val objLoader = ObjLoader()
 
     @JvmOverloads
     fun createSphere(
-            scale: Float = 1f,
-            material: Material = MaterialProvider.diffuse(Color.GRAY)) = loadModel(FileProvider.sphereModel, material)
+        material: Material = MaterialProvider.diffuse(Color.GRAY)
+    ) = loadModel(FileProvider.sphereModel, material)
 
     @JvmOverloads
     fun createCylinder(
-            scale: Float = 1f, material:
-            Material = MaterialProvider.diffuse(Color.GRAY)) = loadModel(FileProvider.cylinderModel, material)
+        material:
+        Material = MaterialProvider.diffuse(Color.GRAY)
+    ) = loadModel(FileProvider.cylinderModel, material)
 
     @JvmOverloads
     fun createBox(
-            scale: Float = 1f,
-            material: Material = MaterialProvider.diffuse(Color.GRAY)) = loadModel(FileProvider.boxModel, material)
+        material: Material = MaterialProvider.diffuse(Color.GRAY)
+    ) = loadModel(FileProvider.boxModel, material)
 
     @JvmOverloads
     fun createSuzanne(
-            scale: Float = 1f,
-            material: Material = MaterialProvider.diffuse(Color.GRAY)) = loadModel(FileProvider.suzanneModel, material)
+        material: Material = MaterialProvider.diffuse(Color.GRAY)
+    ) = loadModel(FileProvider.suzanneModel, material)
 
     @JvmOverloads
-    fun createPerson(
-        scale: Float = 1f,
-        material: Material = MaterialProvider.diffuse(Color.GRAY)) = loadModel(FileProvider.person_1, material)
+    fun createActor(
+        material: Material = MaterialProvider.diffuse(Color.GRAY)
+    ) = loadModel(FileProvider.actor, material)
+
+    fun createPlayground() = loadModel(FileProvider.playground, null)
 
     public fun loadModel(file: FileHandle?, material: Material?): ModelInstance {
         val model = objLoader.loadModel(file, true)

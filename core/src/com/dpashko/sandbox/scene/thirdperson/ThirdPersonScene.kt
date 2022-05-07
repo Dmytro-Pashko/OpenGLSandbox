@@ -23,16 +23,19 @@ class ThirdPersonScene @Inject internal constructor() : Scene {
     private lateinit var boundingBoxShader: BoundingBoxShader
 
     private lateinit var camera: Camera
+    private lateinit var playground: ModelInstance
     private lateinit var actor: Actor
     private lateinit var cameraController: ThirdPersonCameraController
     private lateinit var environment: Environment
     private lateinit var gui: ThirdPersonSceneGui
 
     override fun init() {
+        playground = ModelInstance(ModelProvider.createPlayground())
+
         actor = Actor(
             Vector3.Zero,
             Vector3.Y,
-            ModelInstance(ModelProvider.createPerson(material = MaterialProvider.diffuse(Color.GRAY)))
+            ModelInstance(ModelProvider.createActor(material = MaterialProvider.diffuse(Color.GRAY)))
         ).apply {
             boundingBox?.let {
                 boundingBoxShader = BoundingBoxShader(it)
@@ -63,6 +66,7 @@ class ThirdPersonScene @Inject internal constructor() : Scene {
         boundingBoxShader.render(camera)
         // Draw models.
         batch.begin(camera)
+        batch.render(playground)
         batch.render(actor.model)
         batch.end()
         // Draw GUI.
@@ -75,5 +79,6 @@ class ThirdPersonScene @Inject internal constructor() : Scene {
         gridShader.dispose()
         boundingBoxShader.dispose()
         actor.model?.model?.dispose()
+        playground.model?.dispose()
     }
 }
