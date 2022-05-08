@@ -1,6 +1,6 @@
 package com.dpashko.sandbox.di;
 
-import com.dpashko.sandbox.scene.editor.EditorScene;
+import com.dpashko.sandbox.scene.editor.EditorSandboxScene;
 import com.dpashko.sandbox.skin.SkinProvider;
 import dagger.Module;
 import dagger.Provides;
@@ -9,7 +9,7 @@ import dagger.Provides;
 public class AppModule {
 
     @Provides
-    public EditorScene providesEditorScene() {
-        return new EditorScene(SkinProvider.getDefaultSkin());
+    public EditorSandboxScene providesEditorScene() {
+        return new EditorSandboxScene(SkinProvider.getDefaultSkin());
     }
 }

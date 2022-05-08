@@ -33,12 +33,6 @@ object ModelProvider {
         material: Material = MaterialProvider.diffuse(Color.GRAY)
     ) = loadModel(FileProvider.suzanneModel, material)
 
-    @JvmOverloads
-    fun createActor(
-        material: Material = MaterialProvider.diffuse(Color.GRAY)
-    ) = loadModel(FileProvider.actor, material)
-
-    fun createPlayground() = loadModel(FileProvider.playground, null)
 
     public fun loadModel(file: FileHandle?, material: Material?): ModelInstance {
         val model = objLoader.loadModel(file, true)

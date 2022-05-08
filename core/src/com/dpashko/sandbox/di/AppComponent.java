@@ -1,11 +1,11 @@
 package com.dpashko.sandbox.di;
 
-import com.dpashko.sandbox.scene.cube3d.Cubes3dScene;
-import com.dpashko.sandbox.scene.editor.EditorScene;
-import com.dpashko.sandbox.scene.light3d.Light3dScene;
-import com.dpashko.sandbox.scene.model3d.Model3dScene;
-import com.dpashko.sandbox.scene.plane3d.Plane3dScene;
-import com.dpashko.sandbox.scene.thirdperson.ThirdPersonPlaygroundScene;
+import com.dpashko.sandbox.scene.cube3d.Cubes3DSandboxScene;
+import com.dpashko.sandbox.scene.editor.EditorSandboxScene;
+import com.dpashko.sandbox.scene.light3d.Light3DSandboxScene;
+import com.dpashko.sandbox.scene.model3d.Model3DSandboxScene;
+import com.dpashko.sandbox.scene.plane3d.Plane3DSandboxScene;
+import com.dpashko.sandbox.scene.thirdperson.ThirdPersonSandboxScene;
 import dagger.Component;
 
 import javax.inject.Singleton;
@@ -14,17 +14,17 @@ import javax.inject.Singleton;
 @Component(modules = {AppModule.class})
 public interface AppComponent {
 
-    EditorScene getEditorScene();
+    EditorSandboxScene getEditorScene();
 
-    Plane3dScene getPlane3dScene();
+    Plane3DSandboxScene getPlane3dScene();
 
-    Cubes3dScene getCube3dScene();
+    Cubes3DSandboxScene getCube3dScene();
 
-    Light3dScene getLight3dScene();
+    Light3DSandboxScene getLight3dScene();
 
-    Model3dScene getModel3dScene();
+    Model3DSandboxScene getModel3dScene();
 
-    ThirdPersonPlaygroundScene getThirdPersonPlaygroundScene();
+    ThirdPersonSandboxScene getThirdPersonScene();
 
     @Component.Builder
     interface Builder {

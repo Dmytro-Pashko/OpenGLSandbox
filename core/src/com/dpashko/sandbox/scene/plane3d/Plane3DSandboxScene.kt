@@ -9,11 +9,11 @@ import com.badlogic.gdx.graphics.glutils.*
 import com.badlogic.gdx.math.Matrix4
 import com.badlogic.gdx.math.Vector3
 import com.dpashko.sandbox.files.FileProvider
-import com.dpashko.sandbox.scene.Scene
+import com.dpashko.sandbox.scene.SandboxScene
 import com.dpashko.sandbox.shader.ShaderProvider
 import javax.inject.Inject
 
-class Plane3dScene @Inject internal constructor() : Scene {
+class Plane3DSandboxScene @Inject internal constructor() : SandboxScene {
 
     private lateinit var shader: ShaderProgram
     private lateinit var plane: Plane

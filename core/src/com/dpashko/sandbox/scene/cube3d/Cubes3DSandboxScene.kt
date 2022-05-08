@@ -8,12 +8,12 @@ import com.badlogic.gdx.graphics.glutils.*
 import com.badlogic.gdx.math.Matrix4
 import com.badlogic.gdx.math.Vector3
 import com.dpashko.sandbox.files.FileProvider
-import com.dpashko.sandbox.scene.Scene
+import com.dpashko.sandbox.scene.SandboxScene
 import com.dpashko.sandbox.shader.ShaderProvider
 import javax.inject.Inject
 import kotlin.random.Random
 
-class Cubes3dScene @Inject internal constructor() : Scene {
+class Cubes3DSandboxScene @Inject internal constructor() : SandboxScene {
 
     private val viewMatrix = Matrix4().apply {
         val position = Vector3(0f, -8f, 0f)

@@ -1,6 +1,6 @@
 package com.dpashko.sandbox.scene
 
-interface Scene {
+interface SandboxScene {
 
     fun init()
 

@@ -7,9 +7,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
 import com.badlogic.gdx.utils.Align
 import com.badlogic.gdx.utils.Array
-import com.dpashko.sandbox.scene.Scene
+import com.dpashko.sandbox.scene.SandboxScene
 
-class EditorScene(skin: Skin) : Scene, ChangeListener() {
+class EditorSandboxScene(skin: Skin) : SandboxScene, ChangeListener() {
 
     private var stage = Stage()
     private var table = Table(skin)
@@ -36,22 +36,22 @@ class EditorScene(skin: Skin) : Scene, ChangeListener() {
                     right()
                     add(drawGridCheckBox.apply {
                         isChecked = state.isDrawGrid
-                        addListener(this@EditorScene)
+                        addListener(this@EditorSandboxScene)
                     }).padLeft(10f)
                     add(gridSizeLabel)
                             .padLeft(10f)
                     add(gridSizeSelectBox.apply {
                         items = Array(GridSize.values())
                         selected = state.gridSize
-                        addListener(this@EditorScene)
+                        addListener(this@EditorSandboxScene)
                     })
                     add(wireFrameModeCheckBox.apply {
                         isChecked = state.isWireframeMode
-                        addListener(this@EditorScene)
+                        addListener(this@EditorSandboxScene)
                     }).padLeft(10f)
                     add(drawAxisCheckBox.apply {
                         isChecked = state.isDrawAxis
-                        addListener(this@EditorScene)
+                        addListener(this@EditorSandboxScene)
                     }).padLeft(10f).padRight(10f)
                 }).fillX().align(Align.top).expand()
                 row()

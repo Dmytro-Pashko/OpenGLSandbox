@@ -6,7 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.dpashko.sandbox.skin.SkinProvider
 
-class ThirdPersonPlaygroundSceneLoadingGui {
+class ThirdPersonSceneLoadingGui {
 
     private val stage = Stage()
     private var loadingProgressLabel = Label(null, SkinProvider.getDefaultSkin())

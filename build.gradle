@@ -7,7 +7,7 @@ buildscript {
         mavenCentral()
         maven { url "https://plugins.gradle.org/m2/" }
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
-        jcenter()
+        maven { url 'https://jitpack.io' }
         google()
     }
     dependencies {
@@ -27,7 +27,7 @@ allprojects {
     repositories {
         mavenLocal()
         mavenCentral()
-        jcenter()
+        maven { url 'https://jitpack.io' }
         google()
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url "https://oss.sonatype.org/content/repositories/releases/" }
@@ -45,6 +45,7 @@ project(":core") {
         api "com.badlogicgames.gdx:gdx-bullet:$gdxVersion"
         api "com.badlogicgames.gdx:gdx-ai:1.8.2"
         api "com.badlogicgames.ashley:ashley:1.7.4"
+        implementation "com.github.mgsx-dev.gdx-gltf:gltf:2.0.0-rc.1"
 
         compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
 

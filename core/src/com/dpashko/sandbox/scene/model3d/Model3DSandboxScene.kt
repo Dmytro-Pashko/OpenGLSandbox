@@ -11,11 +11,11 @@ import com.badlogic.gdx.graphics.g3d.environment.PointLight
 import com.badlogic.gdx.math.Vector3
 import com.dpashko.sandbox.files.FileProvider
 import com.dpashko.sandbox.model.ModelProvider
-import com.dpashko.sandbox.scene.Scene
+import com.dpashko.sandbox.scene.SandboxScene
 import com.dpashko.sandbox.scene.editor.EditorCameraController
 import javax.inject.Inject
 
-open class Model3dScene @Inject protected constructor() : Scene {
+open class Model3DSandboxScene @Inject protected constructor() : SandboxScene {
 
     private val rotationSpeed = .1f
     private val camera = PerspectiveCamera(67f, Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())

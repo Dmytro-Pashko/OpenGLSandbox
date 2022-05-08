@@ -5,7 +5,7 @@ import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
 import com.dpashko.sandbox.di.AppComponent
 import com.dpashko.sandbox.di.DaggerAppComponent
-import com.dpashko.sandbox.scene.Scene
+import com.dpashko.sandbox.scene.SandboxScene
 
 class Sandbox : ApplicationAdapter() {
 
@@ -13,22 +13,22 @@ class Sandbox : ApplicationAdapter() {
 
     internal companion object {
         @JvmStatic
-        private var activeScene: Scene? = null
+        private var activeSandboxScene: SandboxScene? = null
     }
 
     override fun create() {
         Gdx.app.logLevel = Application.LOG_DEBUG
         component = DaggerAppComponent.create().also {
-            activeScene = it.thirdPersonPlaygroundScene
+            activeSandboxScene = it.thirdPersonScene
         }
-        activeScene?.init()
+        activeSandboxScene?.init()
     }
 
     override fun render() {
-        activeScene?.draw()
+        activeSandboxScene?.draw()
     }
 
     override fun dispose() {
-        activeScene?.dispose()
+        activeSandboxScene?.dispose()
     }
 }

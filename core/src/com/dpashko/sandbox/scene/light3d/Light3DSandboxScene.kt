@@ -6,11 +6,11 @@ import com.badlogic.gdx.graphics.PerspectiveCamera
 import com.badlogic.gdx.math.Vector3
 import com.dpashko.sandbox.files.FileProvider
 import com.dpashko.sandbox.model.ModelProvider
-import com.dpashko.sandbox.scene.Scene
+import com.dpashko.sandbox.scene.SandboxScene
 import com.dpashko.sandbox.shader.LightShader
 import javax.inject.Inject
 
-class Light3dScene @Inject constructor() : Scene {
+class Light3DSandboxScene @Inject constructor() : SandboxScene {
 
     private val lightShader = LightShader()
     private val model = ModelProvider.loadModel(FileProvider.suzanneModelHighPoly, null)
