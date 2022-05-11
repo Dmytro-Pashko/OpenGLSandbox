@@ -5,33 +5,42 @@ import com.badlogic.gdx.graphics.Camera
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.VertexAttribute
+import com.badlogic.gdx.graphics.glutils.ShaderProgram
 import com.badlogic.gdx.graphics.glutils.VertexBufferObjectWithVAO
 import com.badlogic.gdx.utils.Disposable
 import java.util.*
 
-class GridShader(private val gridSize: Int = 64,
-                 private val gridLineWidth: Float = 1f,
-                 lineColor: Color = Color.GRAY) : Disposable {
+class GridShader(
+    private val shader: ShaderProgram,
+    private val gridSize: Int = 64,
+    private val gridLineWidth: Float = 1f,
+    lineColor: Color = Color.GRAY
+) : Disposable {
 
     private val colorVector = floatArrayOf(lineColor.r, lineColor.g, lineColor.b, 0f)
-    private val shader = ShaderProvider.grid3dShader()
     private val vertices = createVertices()
 
     private fun createVertices() =
-            VertexBufferObjectWithVAO(true, 4 * (gridSize + 1), VertexAttribute.Position()).apply {
-                val vertices = LinkedList<Float>()
-                for (line in -gridSize / 2..gridSize / 2) {
-                    //Y lines.
-                    vertices.addAll(arrayOf(
-                            line.toFloat(), -gridSize / 2f, 0f,
-                            line.toFloat(), gridSize / 2f, 0f))
-                    //X lines.
-                    vertices.addAll(arrayOf(
-                            -gridSize / 2f, line.toFloat(), 0f,
-                            gridSize / 2f, line.toFloat(), 0f))
-                }
-                setVertices(vertices.toFloatArray(), 0, vertices.size)
+        VertexBufferObjectWithVAO(true, 4 * (gridSize + 1), VertexAttribute.Position()).apply {
+            val vertices = LinkedList<Float>()
+            for (line in -gridSize / 2..gridSize / 2) {
+                //Y lines.
+                vertices.addAll(
+                    arrayOf(
+                        line.toFloat(), -gridSize / 2f, 0f,
+                        line.toFloat(), gridSize / 2f, 0f
+                    )
+                )
+                //X lines.
+                vertices.addAll(
+                    arrayOf(
+                        -gridSize / 2f, line.toFloat(), 0f,
+                        gridSize / 2f, line.toFloat(), 0f
+                    )
+                )
             }
+            setVertices(vertices.toFloatArray(), 0, vertices.size)
+        }
 
     fun draw(camera: Camera) {
         shader.begin()

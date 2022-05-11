@@ -20,7 +20,8 @@ class ThirdPersonSandboxScene @Inject internal constructor(
 ) : SandboxScene {
 
     private val sceneManager = SceneManager()
-    private val gridShader = GridShader(32)
+
+    private lateinit var gridShader: GridShader
     private lateinit var boundingBoxShader: BoundingBoxShader
 
     private lateinit var camera: Camera
@@ -35,16 +36,17 @@ class ThirdPersonSandboxScene @Inject internal constructor(
     private var isSceneLoaded = false
 
     override fun init() {
-        isSceneLoaded = false
-        loadingGui = ThirdPersonSceneLoadingGui().apply {
-            init()
-        }
         // Starts loading of scene assets asynchronously.
         assetManager.loadAssets()
+        loadingGui = ThirdPersonSceneLoadingGui(assetManager.getDefaultGuiSkin()).apply {
+            init()
+        }
+        isSceneLoaded = false
     }
 
     // Initialize scene state after loading assets.
     private fun loadSceneState() {
+        gridShader = GridShader(assetManager.getGridShader(), 32)
         playground = Scene(assetManager.getPlaygroundModel().scene)
         actor = Actor(
             Vector3.Zero,
@@ -52,17 +54,21 @@ class ThirdPersonSandboxScene @Inject internal constructor(
             ModelInstance(assetManager.getActorModel().scene?.model)
         ).apply {
             boundingBox?.let {
-                boundingBoxShader = BoundingBoxShader(it)
+                boundingBoxShader = BoundingBoxShader(assetManager.getBoundingBoxShader(), it)
             }
         }
-        camera = PerspectiveCamera(67f, Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat()).apply {
+        camera = PerspectiveCamera(
+            67f,
+            Gdx.graphics.width.toFloat(),
+            Gdx.graphics.height.toFloat()
+        ).apply {
             up.set(Vector3.Z)
             update()
         }
         cameraController = ThirdPersonCameraController(actor, camera).also {
             Gdx.input.inputProcessor = it
         }
-        sceneGui = ThirdPersonSceneGui().apply {
+        sceneGui = ThirdPersonSceneGui(assetManager.getDefaultGuiSkin()).apply {
             init()
         }
         sceneManager.addScene(playground, false)

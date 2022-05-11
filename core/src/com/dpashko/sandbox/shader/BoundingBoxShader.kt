@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Camera
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.VertexAttribute
+import com.badlogic.gdx.graphics.glutils.ShaderProgram
 import com.badlogic.gdx.graphics.glutils.VertexBufferObjectWithVAO
 import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.math.collision.BoundingBox
@@ -12,11 +13,13 @@ import com.badlogic.gdx.utils.Disposable
 import java.util.*
 
 class BoundingBoxShader(
-    bounding: BoundingBox, private val lineWidth: Float = 1f, lineColor: Color = Color.RED
+    private val shader: ShaderProgram,
+    bounding: BoundingBox,
+    private val lineWidth: Float = 1f,
+    lineColor: Color = Color.RED
 ) : Disposable {
 
     private val colorVector = floatArrayOf(lineColor.r, lineColor.g, lineColor.b, 0f)
-    private val shader = ShaderProvider.grid3dShader()
     private val vertices = createVertices(bounding)
 
     fun render(camera: Camera) {

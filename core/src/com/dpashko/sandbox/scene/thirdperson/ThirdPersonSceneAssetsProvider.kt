@@ -1,11 +1,17 @@
 package com.dpashko.sandbox.scene.thirdperson
 
-import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.assets.AssetDescriptor
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.assets.loaders.FileHandleResolver
+import com.badlogic.gdx.assets.loaders.ShaderProgramLoader
+import com.badlogic.gdx.assets.loaders.SkinLoader
+import com.badlogic.gdx.assets.loaders.TextureAtlasLoader
 import com.badlogic.gdx.files.FileHandle
 import com.badlogic.gdx.graphics.Pixmap
 import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.graphics.g2d.TextureAtlas
+import com.badlogic.gdx.graphics.glutils.ShaderProgram
+import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.dpashko.sandbox.utils.PixmapLoaderEx
 import com.dpashko.sandbox.utils.TextureLoaderEx
 import net.mgsx.gltf.loaders.glb.GLBAssetLoader
@@ -19,37 +25,42 @@ import javax.inject.Inject
 class ThirdPersonSceneAssetsProvider @Inject constructor() : AssetManager(ASSETS_RESOLVER, false) {
 
     companion object {
-        private const val MODELS_DIR = "core/assets/models/playground/"
-        private const val TEXTURES_DIR = "core/assets/textures/playground/"
 
-        private const val ACTOR_MODEL = "actor.glb"
-        private const val PLAYGROUND_MODEL = "playground.gltf"
+        private const val ACTOR_MODEL = "resources/models/playground/actor.glb"
+        private const val PLAYGROUND_MODEL = "resources/models/playground/playground.gltf"
+        private const val DEFAULT_UI_SKIN = "resources/ui/default/uiskin.json"
 
-        private val supportedFormats = mapOf(
-            ".gltf" to MODELS_DIR,
-            ".glb" to MODELS_DIR,
+        private val GRID_SHADER = ShaderProgramLoader.ShaderProgramParameter().apply {
+            fragmentFile = "resources/shaders/grid_3d_f.glsl"
+            vertexFile = "resources/shaders/grid_3d_v.glsl"
+        }
 
-            ".png" to TEXTURES_DIR,
-            ".jpg" to TEXTURES_DIR,
-        )
-
-        private val ASSETS_RESOLVER = FileHandleResolver { assetFile ->
-            val fileName = assetFile.substringAfterLast("/", assetFile)
-            var handle: FileHandle? = null
-            supportedFormats.forEach { (format, assetsDir) ->
-                if (assetFile.contains(format, true)) {
-                    handle = Gdx.files.local(assetsDir + fileName)
-                }
-            }
-            handle ?: throw IllegalArgumentException("Unsupported asset: $fileName")
+        private val ASSETS_RESOLVER = FileHandleResolver { assetName ->
+            val assetFile = FileHandle(assetName)
+            println("Loading of ${assetFile.file()}")
+            assetFile
         }
     }
 
     init {
         setLoader(SceneAsset::class.java, ".gltf", GLTFAssetLoader(ASSETS_RESOLVER))
         setLoader(SceneAsset::class.java, ".glb", GLBAssetLoader(ASSETS_RESOLVER))
+        setLoader(ShaderProgram::class.java, ShaderProgramLoader(ASSETS_RESOLVER))
         setLoader(Texture::class.java, TextureLoaderEx(ASSETS_RESOLVER))
         setLoader(Pixmap::class.java, PixmapLoaderEx(ASSETS_RESOLVER))
+        setLoader(Skin::class.java, SkinLoader(ASSETS_RESOLVER))
+        setLoader(TextureAtlas::class.java, TextureAtlasLoader(ASSETS_RESOLVER))
+    }
+
+    /**
+     * Starts async loading of scene assets.
+     */
+    fun loadAssets() {
+        load(DEFAULT_UI_SKIN, Skin::class.java)
+        load(PLAYGROUND_MODEL, SceneAsset::class.java)
+        load(ACTOR_MODEL, SceneAsset::class.java)
+        load(AssetDescriptor("", ShaderProgram::class.java, GRID_SHADER))
+        update()
     }
 
     fun getPlaygroundModel(): SceneAsset {
@@ -60,12 +71,18 @@ class ThirdPersonSceneAssetsProvider @Inject constructor() : AssetManager(ASSETS
         return get(ACTOR_MODEL)
     }
 
-    /**
-     * Starts async loading of scene assets.
-     */
-    fun loadAssets() {
-        load(PLAYGROUND_MODEL, SceneAsset::class.java)
-        load(ACTOR_MODEL, SceneAsset::class.java)
-        update()
+    fun getDefaultGuiSkin(): Skin {
+        if (!isLoaded(DEFAULT_UI_SKIN)) {
+            finishLoadingAsset<Skin>(DEFAULT_UI_SKIN)
+        }
+        return get(DEFAULT_UI_SKIN)
+    }
+
+    fun getGridShader(): ShaderProgram {
+        return get(AssetDescriptor("", ShaderProgram::class.java, GRID_SHADER))
+    }
+
+    fun getBoundingBoxShader(): ShaderProgram {
+        return get(AssetDescriptor("", ShaderProgram::class.java, GRID_SHADER))
     }
 }

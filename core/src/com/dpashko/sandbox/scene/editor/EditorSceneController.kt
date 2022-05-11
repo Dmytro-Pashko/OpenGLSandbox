@@ -15,7 +15,7 @@ class EditorSceneController(val state: EditorSceneState = EditorSceneState()) {
     private var modelBatch = ModelBatch()
     private var wireframeShader = WireframeShader()
     private var axisShader = AxisShader(axisLength = state.gridSize.size.toFloat())
-    private var gridShader = GridShader(gridSize = state.gridSize.size)
+//    private var gridShader = GridShader(gridSize = state.gridSize.size)
 
     fun init() {
         if (Gdx.input.inputProcessor == null) {
@@ -52,7 +52,7 @@ class EditorSceneController(val state: EditorSceneState = EditorSceneState()) {
 
     private fun drawGrid() {
         if (state.isDrawGrid) {
-            gridShader.draw(state.camera)
+//            gridShader.draw(state.camera)
         }
     }
 
@@ -81,13 +81,13 @@ class EditorSceneController(val state: EditorSceneState = EditorSceneState()) {
 
     fun onGridSizeChanged(gridSize: GridSize) {
         state.gridSize = gridSize
-        gridShader = GridShader(gridSize.size)
+//        gridShader = GridShader(gridSize.size)
         axisShader = AxisShader(gridSize.size.toFloat())
     }
 
     fun dispose() {
         axisShader.dispose()
-        gridShader.dispose()
+//        gridShader.dispose()
         worldController.dispose()
     }
 

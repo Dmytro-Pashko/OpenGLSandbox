@@ -3,13 +3,13 @@ package com.dpashko.sandbox.scene.thirdperson
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
-import com.dpashko.sandbox.skin.SkinProvider
 
-class ThirdPersonSceneLoadingGui {
+class ThirdPersonSceneLoadingGui(skin: Skin) {
 
     private val stage = Stage()
-    private var loadingProgressLabel = Label(null, SkinProvider.getDefaultSkin())
+    private var loadingProgressLabel = Label(null, skin)
 
     fun init() {
         stage.addActor(
