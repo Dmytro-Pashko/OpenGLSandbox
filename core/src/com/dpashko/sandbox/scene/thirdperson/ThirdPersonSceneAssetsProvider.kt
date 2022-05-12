@@ -1,12 +1,12 @@
 package com.dpashko.sandbox.scene.thirdperson
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.assets.AssetDescriptor
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.assets.loaders.FileHandleResolver
 import com.badlogic.gdx.assets.loaders.ShaderProgramLoader
 import com.badlogic.gdx.assets.loaders.SkinLoader
 import com.badlogic.gdx.assets.loaders.TextureAtlasLoader
-import com.badlogic.gdx.files.FileHandle
 import com.badlogic.gdx.graphics.Pixmap
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
@@ -36,8 +36,10 @@ class ThirdPersonSceneAssetsProvider @Inject constructor() : AssetManager(ASSETS
         }
 
         private val ASSETS_RESOLVER = FileHandleResolver { assetName ->
-            val assetFile = FileHandle(assetName)
-            println("Loading of ${assetFile.file()}")
+            // Normalize path to asset, some application keeps some related path double dots are used for moving up in
+            // the hierarchy.
+            val assetFile = Gdx.files.internal(Gdx.files.internal(assetName).file().normalize().path)
+            println("Loading of ${assetFile.file().absoluteFile}")
             assetFile
         }
     }

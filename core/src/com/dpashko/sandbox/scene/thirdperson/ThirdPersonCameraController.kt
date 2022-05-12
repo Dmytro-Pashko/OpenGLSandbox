@@ -54,8 +54,8 @@ class ThirdPersonCameraController(
     }
 
     private fun calculateCameraPosition() {
-        val offsetX = distanceToPlayer * sin(Math.toRadians(angleAroundPlayer.toDouble()))
-        val offsetY = distanceToPlayer * cos(Math.toRadians(angleAroundPlayer.toDouble()))
+        val offsetX = distanceToPlayer * sin(Math.toRadians(180 + angleAroundPlayer.toDouble()))
+        val offsetY = distanceToPlayer * cos(Math.toRadians(180 + angleAroundPlayer.toDouble()))
         val offsetZ = distanceToPlayer * sin(Math.toRadians(pitchAngle.toDouble()))
 
         camera.position.x = (actor.position.x + offsetX).toFloat()
